@@ -1,28 +1,16 @@
 
-const SKY_COLOR = 240;
-const HORIZONT = 0.8;
-const SUN_SPEED = 0.1;
-const CLOUD_SIZE = 60;
-const ORBIT_RADIUS = 360;
-const WINDOW_WIDHT = 100;
-const WINDOW_HEIGHT = 120;
-const CLOUD_RADIUS_X = 60;
-const CLOUD_RADIUS_Y = 40;
-const HOUSE_WIDHT = 220;
-const HOUSE_HEIGHT = 240;
-const MIN_CLOUDS_LEVEL = 30;
-const MIN_CLOUD_SPEED = 100;
-const DELTA_SPEED = 0.0001; 
-const MAX_SPEED_COEFFICIENT = 10;
-const MIN_SPEED_COEFFICIENT = -10;
-
 const LEFT = -1;
 const RIGHT = 1;
 const SIDE = 50;
 const SHIP_SPEED = 100;
 const WIDHT = 500;
+const HEIGHT = 1000;
 const BULLET_SPEED = 500;
 const BULLET_SIZE = 5;
+const SHIP_MOVEMENT_LINE = 30;
+const STAR_SIZE = 1;
+const START_SPEED = 100;
+const COUNT_STARS = 50;
 
 
 function Ship({
@@ -34,6 +22,14 @@ function Ship({
 }
 
 function Bullet({
+    startX,
+    startY    
+}) {
+    this.x = startX;
+    this.y = startY
+}
+
+function Star({
     startX,
     startY    
 }) {
@@ -170,9 +166,14 @@ function drawHouse(ctx, centrX, centrY , houseWidht, houseHight, windowWidht, wi
     ctx.stroke();
 }
 */
-function redraw({ctx, ship, side, width, height}) {
+function redraw({ctx, ship, side, width, height, bullets, stars}) {
     drawCosmos(ctx, width, height);
+    drawStars(ctx, stars);
     drawShip(ctx, ship, SIDE);
+    for (const bullet of bullets) {        
+        drawBullet({ctx, bullet});
+    }
+    
     
 }
 /*
@@ -214,6 +215,27 @@ function drawCosmos(ctx, width, height) {
     ctx.fill();
 }
 
+function createStars(stars) {
+    for (let i = 0; i < COUNT_STARS; i++) {
+        starX = Math.random() * WIDHT;
+        starY = Math.random() * HEIGHT;
+        stars.push(new Star({startX: starX, startY: starY}));
+    }
+}
+
+function drawStar(ctx, star) {
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, STAR_SIZE, 0, Math.PI * 2);
+    ctx.fill();    
+}
+
+function drawStars(ctx, stars) {
+    for (const star of stars) {        
+        drawStar(ctx, star);
+    }
+}
+
 function drawBullet({ctx, bullet}) {
     ctx.fillStyle = "red";
     ctx.beginPath();
@@ -232,8 +254,23 @@ function moveBullet({bullet, deltaTime}) {
        
 }
 
-function update({ship, deltaTime, direction}) {
+function moveStar({star, deltaTime}) {
+    star.y += START_SPEED * deltaTime;
+    if (star.y > HEIGHT) {
+        star.y = 0;
+        star.x = Math.random() * WIDHT;
+    }
+       
+}
+
+function update({ship, deltaTime, direction, bullets, stars}) {
     moveShip({ship, deltaTime, direction});
+    for (const bullet of bullets) {
+        moveBullet({bullet, deltaTime});    
+    }
+    for (const star of stars) {
+        moveStar({star, deltaTime});    
+    }
 }
 
 /*
@@ -261,17 +298,18 @@ function main() {
     let isFire = false;
 
     let bullets = [];
-    let ship = new Ship({startX: (width - SIDE) / 2, startY: height - 50});
-    var bullet = new Bullet({startX: ship.x + SIDE / 2, startY: ship.y + SIDE});
+    let stars = [];
+    let ship = new Ship({startX: (width - SIDE) / 2, startY: height - SHIP_MOVEMENT_LINE});
+    createStars(stars);
+  
     let direction = 0;
-    drawShip(ctx, ship, SIDE);
 
     let lastTimestamp = Date.now(); //текущее время в ms
     const animateFn = () => {
         //direction = 0;
         const currentTimeStamp = Date.now();
         const deltaTime = (currentTimeStamp - lastTimestamp) * 0.001; //сколько секунд прошло с прошлого кадра
-        //drawShip(ctx, ship, SIDE);
+       
         document.addEventListener("keydown", (event) => {
             if (event.keyCode == 37) {
                 direction = LEFT;
@@ -296,23 +334,15 @@ function main() {
         document.addEventListener("keydown", (event) => {
             if ((event.keyCode == 32) && (!isFire)) {
                 isFire = true;
-                bullets.push(new Bullet({startX: ship.x + SIDE / 2, startY: ship.y + SIDE}));
+                bullets.push(new Bullet({startX: ship.x + SIDE / 2, startY: ship.y - SIDE * Math.cos(Math.PI / 3)}));
             }
         })
 
 
         lastTimestamp = currentTimeStamp;
     
-            update({ship, deltaTime, direction});
-            
-            redraw({ctx, ship, SIDE, width, height});
-          
-                for (const bullet of bullets) {
-                moveBullet({bullet, deltaTime});
-                drawBullet({ctx, bullet});
-                }
-            
-                
+        update({ship, deltaTime, direction, bullets, stars});    
+        redraw({ctx, ship, SIDE, width, height, bullets, stars});            
         
         requestAnimationFrame(animateFn);
     }
