@@ -70,6 +70,31 @@ function Star({
     this.y = startY
 }
 
+function createEnemys(enemys) {
+    for (let i = 0; i < COUNT_ENEMY_IN_LINE; i++) {
+        enemys.push(new Enemy({
+            startX: (WIDHT / COUNT_ENEMY_IN_LINE) + 2 * i * ENEMY_SIDE, 
+            startY: ENEMY_LINE, 
+            direction: LEFT,
+            shootingTime: Math.random() * 5,
+            shoot: NO_SHOOT   
+        }));
+    }
+}
+
+function createStars(stars) {
+    for (let i = 0; i < COUNT_STARS; i++) {
+        starX = Math.random() * WIDHT;
+        starY = Math.random() * HEIGHT;
+        stars.push(new Star({startX: starX, startY: starY}));
+    }
+}
+
+function createBullet({startBulletX, startBulletY}) {
+    return new Bullet({startBulletX, startBulletY})
+}
+
+
 function drawShip(ctx, ship, side) {
           
     ctx.fillStyle = "red";
@@ -91,34 +116,6 @@ function drawEnemy(ctx, enemy) {
     ctx.fill();
 }
 
-function createEnemys(enemys) {
-    for (let i = 0; i < COUNT_ENEMY_IN_LINE; i++) {
-        enemys.push(new Enemy({
-            startX: (WIDHT / COUNT_ENEMY_IN_LINE) + 2 * i * ENEMY_SIDE, 
-            startY: ENEMY_LINE, 
-            direction: LEFT,
-            shootingTime: Math.random() * 5,
-            shoot: NO_SHOOT   
-        }));
-    }
-}
-
-function redraw({ctx, ship, side, width, height, bullets, stars, enemys, enemyBullets}) {
-    drawCosmos(ctx, width, height);
-    drawStars(ctx, stars);
-    drawShip(ctx, ship, SIDE);
-    for (const enemy of enemys) {
-        drawEnemy(ctx, enemy, ENEMY_SIDE);
-    }
-    for (const bullet of bullets) {        
-        drawBullet({ctx, bullet, bulletColor: MY_BULLET_COLOR});
-    }
-    for (const bullet of enemyBullets) {        
-        drawBullet({ctx, bullet, bulletColor: ENEMY_BULLET_COLOR});
-    }
-    
-    
-}
 
 function drawCosmos(ctx, width, height) {
     ctx.beginPath();
@@ -127,13 +124,7 @@ function drawCosmos(ctx, width, height) {
     ctx.fill();
 }
 
-function createStars(stars) {
-    for (let i = 0; i < COUNT_STARS; i++) {
-        starX = Math.random() * WIDHT;
-        starY = Math.random() * HEIGHT;
-        stars.push(new Star({startX: starX, startY: starY}));
-    }
-}
+
 
 function drawStar(ctx, star) {
     ctx.fillStyle = "white";
@@ -155,29 +146,46 @@ function drawBullet({ctx, bullet, bulletColor}) {
     ctx.fill();
 }
 
+
+function redraw({ctx, ship, side, width, height, bullets, stars, enemys, enemyBullets}) {
+    drawCosmos(ctx, width, height);
+    drawStars(ctx, stars);
+    drawShip(ctx, ship, SIDE);
+    for (const enemy of enemys) {
+        drawEnemy(ctx, enemy, ENEMY_SIDE);
+    }
+    for (const bullet of bullets) {        
+        drawBullet({ctx, bullet, bulletColor: MY_BULLET_COLOR});
+    }
+    for (const bullet of enemyBullets) {        
+        drawBullet({ctx, bullet, bulletColor: ENEMY_BULLET_COLOR});
+    }
+    
+    
+}
+
+
 function moveShip({ship, deltaTime, direction}) {
     if (((ship.x > 0) && (direction ==LEFT)) || ((ship.x + SIDE < WIDHT) && (direction == RIGHT))) {
         ship.x += SHIP_SPEED * deltaTime * direction;
     }   
 }
-
-function moveBullet({bullet, deltaTime, direction}) {
-    bullet.y -= BULLET_SPEED * deltaTime;
+/*
+function moveBullet1({bullet, deltaTime, direction}) {
+    bullet.y += BULLET_SPEED * deltaTime * direction;
     if (bullet.y <= 0) {
         delete bullet;
-    }
-       
+    }       
+}
+
+function moveBullet({bullet, deltaTime, direction}) {
+    bullet.y -= BULLET_SPEED * deltaTime;  
 }
 
 function moveEnemyBullet({enemyBullet, deltaTime}) {
-    enemyBullet.y += BULLET_SPEED * deltaTime;
-    if (enemyBullet.y > HEIGHT) {
-        delete enemyBullet;
-    }
-       
+    enemyBullet.y += BULLET_SPEED * deltaTime; 
 }
-
-
+*/
 function moveStar({star, deltaTime}) {
     star.y += START_SPEED * deltaTime;
     if (star.y > HEIGHT) {
@@ -214,26 +222,23 @@ function shootingEnemys({enemys, deltaTime, enemyBullets}) {
 function enemyConflictHandling({enemys, bullets}) {
     let i = 0;
     for (const bullet of bullets) {
-        //if (bullet.y - ENEMY_LINE - ) <= 0) {
+        if (bullet.y - ENEMY_LINE <= BULLET_SIZE) {
             for (i = 0; i < enemys.length; i++) {
-                if (((enemys[i].x  - bullet.x >= 0) && (enemys[i].x - bullet.x <= BULLET_SIZE)) && (bullet.y - enemys[i].y <= BULLET_SIZE)) {
-                    console.log('!!!!');
-                    //delete enemy;
+                if (((enemys[i].x  - bullet.x >= 0) && (enemys[i].x - bullet.x <= BULLET_SIZE))) {
                     enemys.splice(i, 1);
                 }
             }
 
-       // }
+        }
        
     }
 }
 
-function moveBullets({bullets, deltaTime}) {
+function moveBullets({bullets, deltaTime, direction}) {
     for (i = 0; i < bullets.length; i++) {
-        moveBullet({bullet: bullets[i], deltaTime});
-        if ((bullets[i].y < 0) || (bullets[i] > HEIGHT)) {
+        bullets[i].y += BULLET_SPEED * deltaTime * direction;
+        if ((bullets[i].y < 0) || (bullets[i].y > HEIGHT)) {
             bullets.splice(i, 1);
-            //console.log('.');
         }
     }
 }
@@ -242,35 +247,14 @@ function moveBullets({bullets, deltaTime}) {
 function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets}) {
     let i = 0;
     moveShip({ship, deltaTime, direction});
-    //moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
-    
-    for (i = 0; i < bullets.length; i++) {
-        moveBullet({bullet: bullets[i], deltaTime});
-        if ((bullets[i].y < 0) /*|| (bullets[i] > HEIGHT)*/) {
-            bullets.splice(i, 1);
-            //console.log('.');
-        }
-    }
-   
-    if (enemys.length != 0) {
-    moveEnemys({enemys, deltaTime});
-    enemyConflictHandling({enemys, bullets});
-    shootingEnemys({enemys, deltaTime, enemyBullets});
-    }
-    //moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
-/*
-    for (const enemyBullet of enemyBullets) {
-        moveEnemyBullet({enemyBullet, deltaTime});    
-    }
-*/
+    moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
   
-    for (i = 0; i < enemyBullets.length; i++) {
-    moveEnemyBullet({enemyBullet: enemyBullets[i], deltaTime});
-    if (enemyBullets[i].y > HEIGHT) {
-        enemyBullets.splice(i, 1);
-        //console.log('.');
+    if (enemys.length != 0) {
+        moveEnemys({enemys, deltaTime});
+        enemyConflictHandling({enemys, bullets});
+        shootingEnemys({enemys, deltaTime, enemyBullets});
     }
-}
+    moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
 
     for (const star of stars) {
         moveStar({star, deltaTime});    
@@ -278,9 +262,7 @@ function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullet
 }
 
 
-function createBullet({startBulletX, startBulletY}) {
-    return new Bullet({startBulletX, startBulletY})
-}
+
 
 
 
@@ -327,14 +309,10 @@ function main() {
         }
         document.addEventListener("keydown", (event) => {
             if (event.keyCode == 37) {
-                //current_direction.r = false;
-                //current_direction.n = false;
                 current_direction.l = true;
             }
             if ((event.keyCode == 39)) {
                 current_direction.r = true;
-                //current_direction.l = false;
-                //current_direction.n = false;
             }
             if ((event.keyCode == 32) && (!isFire)) {
                 isFire = true;
@@ -346,32 +324,15 @@ function main() {
         document.addEventListener("keyup", (event) => {
             if (event.keyCode == 37) {
                 current_direction.l = false;
-                //current_direction.n = true;
             }
             if (event.keyCode == 39) {
                 current_direction.r = false;
-                //current_direction.n = true;
             }
             if (event.keyCode == 32) {
                 isFire = false;
             }
         })
-/*
 
-        document.addEventListener("keypress", (event) => {
-            if (event.keyCode == 37) {
-                direction = LEFT;
-            } else if ((event.keyCode == 39)) {
-                direction = RIGHT;
-            }
-        })
-
-
-        document.addEventListener("keydown", (event) => {
-            
-        })
-
-*/
         lastTimestamp = currentTimeStamp;
         direction = getDirection(current_direction);
         
