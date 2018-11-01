@@ -218,19 +218,15 @@ function shootingEnemys({enemys, deltaTime, enemyBullets}) {
         }
     }    
 }
-
+/*обработка коллизии*/
 function enemyConflictHandling({enemys, bullets}) {
     let i = 0;
     for (const bullet of bullets) {
-        if (bullet.y - ENEMY_LINE <= BULLET_SIZE) {
-            for (i = 0; i < enemys.length; i++) {
-                if (((enemys[i].x  - bullet.x >= 0) && (enemys[i].x - bullet.x <= BULLET_SIZE))) {
-                    enemys.splice(i, 1);
-                }
+        for (i = 0; i < enemys.length; i++) {
+            if (((enemys[i].x  - bullet.x < BULLET_SIZE) && (bullet.x  - enemys[i].x < ENEMY_SIDE + BULLET_SIZE)) && (bullet.y - enemys[i].y < BULLET_SIZE)) {
+                 enemys.splice(i, 1);
             }
-
         }
-       
     }
 }
 
@@ -260,11 +256,6 @@ function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullet
         moveStar({star, deltaTime});    
     }
 }
-
-
-
-
-
 
 function getDirection(current_direction)
 {
