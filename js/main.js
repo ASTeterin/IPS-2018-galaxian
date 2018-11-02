@@ -21,6 +21,9 @@ const MY_BULLET_COLOR = "blue";
 const ENEMY_BULLET_COLOR = "red";
 const MY_BULLET_DIRECTION = -1;
 const ENEMY_BULLET_DIRECTION = 1;
+const NO_HIT = false;
+const HIT = true;
+const BEGIN_HEALTH_STATE = 5;
 
 function Direction({
     left,
@@ -34,10 +37,14 @@ function Direction({
 
 function Ship({
     startX,
-    startY    
+    startY,
+    hit,
+    health    
 }) {
     this.x = startX;
-    this.y = startY
+    this.y = startY;
+    this.hit = hit;
+    this.health = health;
 }
 
 function Enemy({
@@ -230,6 +237,31 @@ function enemyConflictHandling({enemys, bullets}) {
     }
 }
 
+function myShipConflictHandling({ship, enemyBullets}) {
+    let i = 0;
+    for (i = 0; i < enemyBullets.length; i++) {
+        if (((ship.x  - enemyBullets[i].x < BULLET_SIZE) && (enemyBullets[i].x  - ship.x < SIDE + BULLET_SIZE)) && (ship.y - enemyBullets[i].y < BULLET_SIZE)) {
+            //enemys.splice(i, 1);
+            //console.log('kill');
+            ship.hit = HIT;
+            enemyBullets.splice(i, 1);
+            break;  
+        }
+    }
+    if (ship.hit) {
+        ship.health--;
+        console.log(ship.health);
+        ship.hit = NO_HIT;
+    }
+}
+
+function checkDeathShip(ship) {
+    if (ship.health == 0) {
+
+    }
+}
+
+
 function moveBullets({bullets, deltaTime, direction}) {
     for (i = 0; i < bullets.length; i++) {
         bullets[i].y += BULLET_SPEED * deltaTime * direction;
@@ -251,6 +283,7 @@ function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullet
         shootingEnemys({enemys, deltaTime, enemyBullets});
     }
     moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
+    myShipConflictHandling({ship, enemyBullets});
 
     for (const star of stars) {
         moveStar({star, deltaTime});    
@@ -283,7 +316,7 @@ function main() {
     let enemyBullets = [];
     let stars = [];
     let enemys = [];
-    let ship = new Ship({startX: (width - SIDE) / 2, startY: height - SHIP_MOVEMENT_LINE});
+    let ship = new Ship({startX: (width - SIDE) / 2, startY: height - SHIP_MOVEMENT_LINE, hit: NO_HIT, health: BEGIN_HEALTH_STATE});
     let current_direction = new Direction({left: false, right: false, noDirection: false});
     
     createStars(stars);
@@ -328,7 +361,12 @@ function main() {
         direction = getDirection(current_direction);
         
         update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets});    
-        redraw({ctx, ship, SIDE, width, height, bullets, stars, enemys, enemyBullets});            
+        redraw({ctx, ship, SIDE, width, height, bullets, stars, enemys, enemyBullets}); 
+        
+        if (ship.health == 0) {
+            console.log("GAME OVER");
+            return 0;
+        }
         
         requestAnimationFrame(animateFn);
     }
