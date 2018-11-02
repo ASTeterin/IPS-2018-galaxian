@@ -7,6 +7,7 @@ const SHIP_SPEED = 100;
 const WIDHT = 500;
 const HEIGHT = 1000;
 const BULLET_SPEED = 300;
+const ROCKET_SPEED = 500;
 const BULLET_SIZE = 3;
 const SHIP_MOVEMENT_LINE = 30;
 const STAR_SIZE = 1;
@@ -62,6 +63,14 @@ function Enemy({
 }
 
 function Bullet({
+    startX,
+    startY    
+}) {
+    this.x = startX;
+    this.y = startY
+}
+
+function Rocket({
     startX,
     startY    
 }) {
@@ -153,8 +162,15 @@ function drawBullet({ctx, bullet, bulletColor}) {
     ctx.fill();
 }
 
+function drawRocket({ctx, rocket}) {
+    ctx.fillStyle = "gold";
+    ctx.beginPath();
+    ctx.fillRect(rocket.x, rocket.y, 3, 20);
+    ctx.fill();
+}
 
-function redraw({ctx, ship, side, width, height, bullets, stars, enemys, enemyBullets}) {
+
+function redraw({ctx, ship, side, width, height, bullets, stars, enemys, enemyBullets, rockets}) {
     drawCosmos(ctx, width, height);
     drawStars(ctx, stars);
     drawShip(ctx, ship, SIDE);
@@ -167,6 +183,10 @@ function redraw({ctx, ship, side, width, height, bullets, stars, enemys, enemyBu
     for (const bullet of enemyBullets) {        
         drawBullet({ctx, bullet, bulletColor: ENEMY_BULLET_COLOR});
     }
+    for (const rocket of rockets) {        
+        drawRocket({ctx, rocket});
+    }
+
     
     
 }
@@ -271,8 +291,17 @@ function moveBullets({bullets, deltaTime, direction}) {
     }
 }
 
+function moveRockets({rockets, deltaTime}) {
+    for (i = 0; i < rockets.length; i++) {
+        rockets[i].y -= ROCKET_SPEED * deltaTime;
+        if ((rockets[i].y < 0) || (rockets[i].y > HEIGHT)) {
+            rockets.splice(i, 1);
+        }
+    }
+}
 
-function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets}) {
+
+function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets, rockets}) {
     let i = 0;
     moveShip({ship, deltaTime, direction});
     moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
@@ -283,6 +312,9 @@ function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullet
         shootingEnemys({enemys, deltaTime, enemyBullets});
     }
     moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
+    if (rockets.length != 0) {
+        moveRockets({rockets, deltaTime});
+    }
     myShipConflictHandling({ship, enemyBullets});
 
     for (const star of stars) {
@@ -311,9 +343,11 @@ function main() {
     const height = canvasEl.offsetHeight;
     const ctx = canvas.getContext('2d');
     let isFire = false;
+    let isRocketVolley = false;
 
     let bullets = [];
     let enemyBullets = [];
+    let rockets = [];
     let stars = [];
     let enemys = [];
     let ship = new Ship({startX: (width - SIDE) / 2, startY: height - SHIP_MOVEMENT_LINE, hit: NO_HIT, health: BEGIN_HEALTH_STATE});
@@ -342,6 +376,10 @@ function main() {
                 isFire = true;
                 bullets.push(new Bullet({startX: ship.x + SIDE / 2, startY: ship.y - SIDE * Math.cos(Math.PI / 3)}));
             }
+            if ((event.keyCode == 17) && (!isRocketVolley)) {
+                isRocketVolley = true;
+                rockets.push(new Bullet({startX: ship.x + SIDE / 2, startY: ship.y - SIDE * Math.cos(Math.PI / 3)}));
+            }
         })
 
 
@@ -355,13 +393,16 @@ function main() {
             if (event.keyCode == 32) {
                 isFire = false;
             }
+            if (event.keyCode == 17) {
+                isRocketVolley = false;
+            }
         })
 
         lastTimestamp = currentTimeStamp;
         direction = getDirection(current_direction);
         
-        update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets});    
-        redraw({ctx, ship, SIDE, width, height, bullets, stars, enemys, enemyBullets}); 
+        update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets, rockets});    
+        redraw({ctx, ship, SIDE, width, height, bullets, stars, enemys, enemyBullets, rockets}); 
         
         if (ship.health == 0) {
             console.log("GAME OVER");
