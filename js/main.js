@@ -383,8 +383,18 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
     }
 
     advEnemy.x += ENEMY_HORIZONTAL_SPEED * deltaTime * speedCoef * advEnemy.d;
-    if (ship.x > advEnemy.x) {
+    if ((ship.x > advEnemy.x) && (advEnemy.d == RIGHT) || (ship.x < advEnemy.x) && (advEnemy.d == RIGHT)) {
         advEnemy.y = Math.sqrt(advEnemy.x * 500);    
+    }
+
+    if ((advEnemy.x >= WIDHT-50) && (advEnemy.d == RIGHT)) {
+        advEnemy.d *= -1;
+        advEnemy.y = ADV_ENEMY_LINE;
+    }
+
+    if ((advEnemy.x < 50) && (advEnemy.d ==LEFT)) {
+        advEnemy.d *= -1;
+        advEnemy.y = ADV_ENEMY_LINE;
     }
 
 
