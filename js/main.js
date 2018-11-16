@@ -17,13 +17,10 @@ const COUNT_ENEMY_IN_LINE = 8;
 const ENEMY_SIDE = 25;
 const ENEMY_LINE = 50;
 const ENEMY_HORIZONTAL_SPEED = 100;
-const NO_SHOOT = false;
 const MY_BULLET_COLOR = "blue";
 const ENEMY_BULLET_COLOR = "red";
 const MY_BULLET_DIRECTION = -1;
 const ENEMY_BULLET_DIRECTION = 1;
-const NO_HIT = false;
-const HIT = true;
 const BEGIN_HEALTH_STATE = 10;
 const BEGIN_COUNT_ROCKETS = 5;
 const ROCKET_DESTRUCTION_RADIUS = 50;
@@ -37,25 +34,23 @@ const ADV_ENEMY_LIFES = 3;
 function Direction({
     left,
     right,
-    noDirection
 }) {
-    this.l = left;
-    this.r = right;
-    this.n = noDirection;
+    this.left = left;
+    this.right = right;
 }
 
 function Ship({
     startX,
     startY,
-    hit,
+    direction,
     health,
     countRockers    
 }) {
     this.x = startX;
     this.y = startY;
-    this.hit = hit;
+    this.direction = direction;
     this.health = health;
-    this.CRoc = countRockers;
+    this.countRockers = countRockers;
 }
 
 function Enemy({
@@ -63,13 +58,13 @@ function Enemy({
     startY, 
     direction, 
     shootingTime,
-    shoot
+    isShooting
 }) {
     this.x = startX;
     this.y = startY;
-    this.d = direction;
-    this.st = shootingTime;
-    this.shoot = shoot;
+    this.direction = direction;
+    this.shootingTime = shootingTime;
+    this.isShooting = isShooting;
 }
 
 function AdvansedEnemy({
@@ -78,16 +73,16 @@ function AdvansedEnemy({
     direction, 
     health,
     shootingTime,
-    shoot,
+    isShooting,
     lifes
 }) {
     this.x = startX;
     this.y = startY;
-    this.d = direction;
-    this.h = health;
+    this.direction = direction;
+    this.health = health;
     this.ShTime = shootingTime;
-    this.shoot = shoot;
-    this.l = lifes;
+    this.isShooting = isShooting;
+    this.lifes = lifes;
 }
 
 function Bullet({
@@ -128,7 +123,7 @@ function createEnemys(enemys) {
             startY: ENEMY_LINE, 
             direction: currDirection,
             shootingTime: Math.random() * 5,
-            shoot: NO_SHOOT   
+            isShooting: false   
         }));
     }
 }
@@ -225,7 +220,7 @@ function redraw({ctx, ship, side, width, height, bullets, stars, enemys, enemyBu
     drawCosmos(ctx, width, height);
     drawStars(ctx, stars);
     drawShip(ctx, ship, SIDE);
-    if ((advEnemy) && (advEnemy.h > 0)) {
+    if ((advEnemy) && (advEnemy.health > 0)) {
         drawAdvEnemy(ctx, advEnemy);
     }
     for (const enemy of enemys) {
@@ -243,9 +238,9 @@ function redraw({ctx, ship, side, width, height, bullets, stars, enemys, enemyBu
 }
 
 
-function moveShip({ship, deltaTime, direction}) {
-    if (((ship.x > 0) && (direction == LEFT)) || ((ship.x + SIDE < WIDHT) && (direction == RIGHT))) {
-        ship.x += SHIP_SPEED * deltaTime * direction;
+function moveShip({ship, deltaTime}) {
+    if (((ship.x > 0) && (ship.direction == LEFT)) || ((ship.x + SIDE < WIDHT) && (ship.direction == RIGHT))) {
+        ship.x += SHIP_SPEED * deltaTime * ship.direction;
     }   
 }
 
@@ -261,18 +256,19 @@ function moveEnemys({enemys, deltaTime}) {
     let speedCoef = 1;
     ((enemys[0].x < 0) || (enemys[enemys.length - 1].x > WIDHT))  ? speedCoef = 5: speedCoef = 1;
     for (const enemy of enemys) {
-        enemy.x += ENEMY_HORIZONTAL_SPEED * speedCoef * deltaTime * enemy.d;
+        enemy.x += ENEMY_HORIZONTAL_SPEED * speedCoef * deltaTime * enemy.direction;
     }
-    if (((enemys[0].x <= ENEMY_SIDE) && (enemys[0].d == LEFT)) || (((enemys[enemys.length - 1].x + ENEMY_SIDE) >= WIDHT - ENEMY_SIDE) && (enemys[enemys.length -1].d == RIGHT))) {
+    if (((enemys[0].x <= ENEMY_SIDE) && (enemys[0].direction == LEFT)) || 
+    (((enemys[enemys.length - 1].x + ENEMY_SIDE) >= WIDHT - ENEMY_SIDE) && (enemys[enemys.length -1].direction == RIGHT))) {
         for (const enemy of enemys) {
-            enemy.d *= -1;
+            enemy.direction *= -1;
         }   
     }   
 }
 
 function shootingAdvEnemy({advEnemy, deltaTime, enemyBullets}) {
     advEnemy.ShTime -= deltaTime;
-    if ((advEnemy.shoot) && (advEnemy.ShTime <= 0)) {
+    if ((advEnemy.isShooting) && (advEnemy.ShTime <= 0)) {
        enemyBullets.push(new Bullet({startX: advEnemy.x, startY: advEnemy.y}));
        advEnemy.ShTime = ADV_ENEMY_SHOOTING_TIME;
     }
@@ -280,14 +276,14 @@ function shootingAdvEnemy({advEnemy, deltaTime, enemyBullets}) {
 
 function shootingEnemys({enemys, deltaTime, enemyBullets}) {
     for (const enemy of enemys) {
-        enemy.st -= deltaTime;
-        if (enemy.st <= 0) {
-            enemy.shoot = true;
-            enemy.st = Math.random() * 10;
+        enemy.shootingTime -= deltaTime;
+        if (enemy.shootingTime <= 0) {
+            enemy.isShooting = true;
+            enemy.shootingTime = Math.random() * 10;
         }
-        if (enemy.shoot) {
+        if (enemy.isShooting) {
             enemyBullets.push(new Bullet({startX: enemy.x + ENEMY_SIDE / 2, startY: enemy.y + ENEMY_SIDE * Math.cos(Math.PI / 3)}));
-            enemy.shoot = NO_SHOOT;
+            enemy.isShooting = false;
         }
     }    
 }
@@ -298,10 +294,10 @@ function advEnemyConflictHandling({advEnemy, bullets, rockets}) {
         if ((bullets[i].x + BULLET_SIZE > advEnemy.x) && (bullets[i].x - BULLET_SIZE < advEnemy.x + 30) && 
         (bullets[i].y - advEnemy.y + 30 < BULLET_SIZE + 30) && (advEnemy.y - bullets[i].y < BULLET_SIZE)) {
             bullets.splice(i, 1);
-            advEnemy.h --;
+            advEnemy.health --;
         }
     }
-    if (advEnemy.h <= 0) {
+    if (advEnemy.health <= 0) {
             advEnemy = null;
     }
 
@@ -339,17 +335,19 @@ function enemyConflictHandling({enemys, bullets, rockets}) {
 
 function myShipConflictHandling({ship, enemyBullets}) {
     let i = 0;
+    let isHit = false;
     for (i = 0; i < enemyBullets.length; i++) {
-        if (((ship.x < enemyBullets[i].x + BULLET_SIZE) && (ship.x + SIDE > enemyBullets[i].x - BULLET_SIZE)) && (Math.abs(ship.y - enemyBullets[i].y) < BULLET_SIZE)) {    
-            ship.hit = HIT;
+        if (((ship.x < enemyBullets[i].x + BULLET_SIZE) && (ship.x + SIDE > enemyBullets[i].x - BULLET_SIZE)) 
+        && (Math.abs(ship.y - enemyBullets[i].y) < BULLET_SIZE)) {    
+            isHit = true;
             enemyBullets.splice(i, 1);
             break;  
         }
     }
-    if (ship.hit) {
+    if (isHit) {
         ship.health--;
         console.log(ship.health);
-        ship.hit = NO_HIT;
+        isHit = false;
     }
 }
 
@@ -377,25 +375,25 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
 
     if ((ship.x - advEnemy.x <= 100) && (advEnemy.x - ship.x <= 100)) {
         speedCoef = 0.5;
-        advEnemy.shoot = true;
+        advEnemy.isShooting = true;
     } else {
         speedCoef = 2;
-        advEnemy.shoot = false;
+        advEnemy.isShooting = false;
     }
 
-    advEnemy.x += ENEMY_HORIZONTAL_SPEED * deltaTime * speedCoef * advEnemy.d;
-    if (((ship.x > advEnemy.x) && (advEnemy.d == RIGHT)) || ((ship.x < advEnemy.x) && (advEnemy.d == LEFT))) {
+    advEnemy.x += ENEMY_HORIZONTAL_SPEED * deltaTime * speedCoef * advEnemy.direction;
+    if (((ship.x > advEnemy.x) && (advEnemy.direction == RIGHT)) || ((ship.x < advEnemy.x) && (advEnemy.direction == LEFT))) {
          
         //advEnemy.y = 1.5 * advEnemy.x  * advEnemy.d + 1.5 * Math.pow(WIDHT, - advEnemy.d);
-        (advEnemy.d == 1) ? coef = 0: coef = 1;
+        (advEnemy.direction == 1) ? coef = 0: coef = 1;
         //advEnemy.y = WIDHT * coef - Math.sqrt(advEnemy.x * 500) *(-advEnemy.d);    
-        advEnemy.y = WIDHT * coef - advEnemy.x * (-advEnemy.d);
+        advEnemy.y = WIDHT * coef - advEnemy.x * (-advEnemy.direction);
     }
 
-    if (((advEnemy.x >= 2 * WIDHT) && (advEnemy.d == RIGHT)) || ((advEnemy.x < - WIDHT) && (advEnemy.d ==LEFT))) {
-        advEnemy.d *= -1;
+    if (((advEnemy.x >= 2 * WIDHT) && (advEnemy.direction == RIGHT)) || ((advEnemy.x < - WIDHT) && (advEnemy.direction == LEFT))) {
+        advEnemy.direction *= -1;
         advEnemy.y = ADV_ENEMY_LINE;
-        (advEnemy.d == 1) ? advEnemy.x = 0: advEnemy.x = WIDHT;
+        (advEnemy.direction == 1) ? advEnemy.x = 0: advEnemy.x = WIDHT;
     }
 
 
@@ -404,9 +402,9 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
 
 function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets, rockets, advEnemy}) {
     let i = 0;
-    moveShip({ship, deltaTime, direction});
+    moveShip({ship, deltaTime});
     moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
-    if ((advEnemy) && (advEnemy.h > 0)) {
+    if ((advEnemy) && (advEnemy.health > 0)) {
         moveAdvEnemy({advEnemy, deltaTime, ship});
         shootingAdvEnemy({advEnemy, deltaTime, enemyBullets});
         advEnemyConflictHandling({advEnemy, bullets, rockets});
@@ -431,16 +429,12 @@ function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullet
 
 function getDirection(current_direction)
 {
-    if ((current_direction.l) && (!current_direction.r) && (!current_direction.n)) {
+    if ((current_direction.left) && (!current_direction.right)) {
         return LEFT;
     }
-    if ((current_direction.r) && (!current_direction.l) && (!current_direction.n)) {
+    if ((current_direction.right) && (!current_direction.left)) {
         return RIGHT;
     }
-    if ((current_direction.n) && (!current_direction.l) && (!current_direction.r)) {
-        return NO_MOVE;
-    }
-
 }
 
 function createAdvEnemys(advEnemys, advEnemyPosition) {
@@ -468,10 +462,13 @@ function main() {
     let enemys = [];
     let advEnemys = [];
     let advEnemy = null;
+
+    let direction = 0;
+
     let ship = new Ship({
         startX: (width - SIDE) / 2, 
         startY: height - SHIP_MOVEMENT_LINE, 
-        hit: NO_HIT, 
+        direction: direction,
         health: BEGIN_HEALTH_STATE,
         countRockers: BEGIN_COUNT_ROCKETS
     });
@@ -479,39 +476,46 @@ function main() {
     //(Math.random() < 0.5) ? advEnemyPosition = -ADV_ENEMY_START_POS: advEnemyPosition = WIDHT + ADV_ENEMY_START_POS;
     getAdvancedEnemyParam({advEnemyPosition, advEnemyDirection});
     
-    setTimeout(function() {advEnemy = new AdvansedEnemy({startX: advEnemyPosition, startY: ADV_ENEMY_LINE, direction: RIGHT, health: ADV_ENEMY_HEALTH, shootingTime: ADV_ENEMY_SHOOTING_TIME, shoot: false, lifes: ADV_ENEMY_LIFES});}, 5000);
-    let current_direction = new Direction({left: false, right: false, noDirection: false});
-    //createAdvEnemys(advEnemys, advEnemyPosition);
+    setTimeout(function() {advEnemy = new AdvansedEnemy({
+        startX: advEnemyPosition, 
+        startY: ADV_ENEMY_LINE, 
+        direction: RIGHT, 
+        health: ADV_ENEMY_HEALTH, 
+        shootingTime: ADV_ENEMY_SHOOTING_TIME, 
+        isShooting: false, 
+        lifes: ADV_ENEMY_LIFES});}, 5000);
+    let current_direction = new Direction({left: false, right: false});
     createStars(stars);
-    
-    let direction = 0;
 
     document.addEventListener("keydown", (event) => {
         if (event.keyCode == 37) {
-            current_direction.l = true;
+            current_direction.left = true;
         }
         if ((event.keyCode == 39)) {
-            current_direction.r = true;
+            current_direction.right = true;
         }
         if ((event.keyCode == 32) && (!isFire)) {
             isFire = true;
             bullets.push(new Bullet({startX: ship.x + SIDE / 2, startY: ship.y - SIDE * Math.cos(Math.PI / 3)}));
         }
         if ((event.keyCode == 17) && (!isRocketVolley)) {
-            if (ship.CRoc) {
+            if (ship.countRockers) {
                 isRocketVolley = true;
-                rockets.push(new Bullet({startX: ship.x + SIDE / 2, startY: ship.y - SIDE * Math.cos(Math.PI / 3)}));
-                ship.CRoc--;
+                rockets.push(new Bullet({
+                    startX: ship.x + SIDE / 2, 
+                    startY: ship.y - SIDE * Math.cos(Math.PI / 3)
+                }));
+                ship.countRockers--;
             }
         }
     })
 
     document.addEventListener("keyup", (event) => {
         if (event.keyCode == 37) {
-            current_direction.l = false;
+            current_direction.left = false;
         }
         if (event.keyCode == 39) {
-            current_direction.r = false;
+            current_direction.right = false;
         }
         if (event.keyCode == 32) {
             isFire = false;
@@ -532,18 +536,19 @@ function main() {
             createEnemys(enemys);
         } 
         
-        if ((advEnemy) && (advEnemy.h <= 0) && advEnemy.l > 0)  {
-            setTimeout(function() {advEnemy.h = 5; advEnemy.x = - WIDHT; advEnemy.d = 1, advEnemy.l--}, 5000); 
+        if ((advEnemy) && (advEnemy.health <= 0) && advEnemy.lifes > 0)  {
+           // setTimeout(function() {advEnemy.health = 5; advEnemy.x = - WIDHT; advEnemy.direction = 1, advEnemy.lifes--}, 5000); 
+           advEnemy.health = 5; advEnemy.x = - WIDHT * 10; advEnemy.direction = 1, advEnemy.lifes--;
         }
 
         lastTimestamp = currentTimeStamp;
-        direction = getDirection(current_direction);
+        ship.direction = getDirection(current_direction);
         
-        update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets, rockets, advEnemy: advEnemy});    
-        redraw({ctx, ship, SIDE, width, height, bullets, stars, enemys, enemyBullets, rockets, advEnemy: advEnemy}); 
+        update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy});    
+        redraw({ctx, ship, SIDE, width, height, bullets, stars, enemys, enemyBullets, rockets, advEnemy}); 
         
         if (ship.health == 0) {
-            console.log("GAME OVER");
+            alert('GAME OVER    ');
             return 0;
         }
         

@@ -1,0 +1,69 @@
+body, html
+{
+    margin: 0;
+    padding: 0;
+    
+    width: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.text_color
+{
+    color: #b2b2b2;
+}
+
+
+.errt
+{        
+    background: black;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img_game_header
+{
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
+    max-height: 150px;
+    margin: 0 0 50px 0;
+}
+
+
+
+
+.container canvas
+{
+    outline: 1px solid palegoldenrod;
+}
+
+.btn_menu
+{
+    margin: 10px 0;
+
+}
+
+.registration_form
+{
+    margin:  40px 0;
+}
+
+.img_about_game
+{
+    width: 100%;
+    height: 100%;
+    max-width: 220px; 
+    max-height: 220px; 
+}
+
+.about_game
+{
+    margin-bottom: 50px;
+}
