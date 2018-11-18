@@ -1,0 +1,22 @@
+import {HEIGHT} from './config.js';
+
+const BULLET_SPEED = 400;
+
+function Bullet({
+    startX,
+    startY    
+}) {
+    this.x = startX;
+    this.y = startY
+}
+
+function moveBullets({bullets, deltaTime, direction}) {
+    for (let i = 0; i < bullets.length; i++) {
+        bullets[i].y += BULLET_SPEED * deltaTime * direction;
+        if ((bullets[i].y < 0) || (bullets[i].y > HEIGHT)) {
+            bullets.splice(i, 1);
+        }
+    }
+}
+
+export {Bullet, moveBullets};
