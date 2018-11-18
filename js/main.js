@@ -2,27 +2,18 @@ import { redraw } from './draw.js';
 import {AdvancedEnemy, moveAdvEnemy, shootingAdvEnemy, getAdvancedEnemyParam} from './enemy.js';
 import {createEnemys, moveEnemys, shootingEnemys} from './enemy.js';
 import {enemyConflictHandling, advEnemyConflictHandling} from './enemy.js';
-
 import {Bullet, moveBullets} from './bullets.js';
-
 import {WIDHT, LEFT, RIGHT, MY_SHIP_SIZE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE} from './config.js';
-import {} from './config.js';
-
 import {Ship, moveShip, myShipConflictHandling} from './ship.js';
-
 import {moveRockets} from './rocket.js';
-
 import {createStars, moveStar} from './star.js';
 
 
-
 const SHIP_MOVEMENT_LINE = 30;
-
 const MY_BULLET_DIRECTION = -1;
 const ENEMY_BULLET_DIRECTION = 1;
 const BEGIN_HEALTH_STATE = 10;
 const BEGIN_COUNT_ROCKETS = 5;
-
 const ADV_ENEMY_HEALTH = 5;
 const ADV_ENEMY_LIFES = 3;
 const KEY_CODE_LEFT = 37;
@@ -194,7 +185,6 @@ function main() {
             alert('GAME OVER    ');
             return 0;
         }
-        
         requestAnimationFrame(animateFn);
     }
     animateFn();

@@ -4,7 +4,6 @@ import {ROCKET_DESTRUCTION_RADIUS} from './rocket.js';
 
 
 const ADV_ENEMY_START_POS = 100;
-
 const ENEMY_HORIZONTAL_SPEED = 100;
 const ENEMY_SIDE = 25;
 
@@ -106,7 +105,7 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
 
     if (((advEnemy.x >= 2 * WIDHT) && (advEnemy.direction == RIGHT)) || ((advEnemy.x < - WIDHT) && (advEnemy.direction == LEFT))) {
         advEnemy.direction *= -1;
-        advEnemy.y = ADV_ENEMY_LINE;
+        advEnemy.y = ADV_ENEMY_START_POS;
         (advEnemy.direction == 1) ? advEnemy.x = 0: advEnemy.x = WIDHT;
     }
 
