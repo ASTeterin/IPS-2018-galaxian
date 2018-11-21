@@ -1,4 +1,4 @@
-import {WIDHT, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ADV_ENEMY_SHOOTING_TIME   } from './config.js';
+import {WIDHT, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ADV_ENEMY_SHOOTING_TIME} from './config.js';
 import {Bullet} from './bullets.js';
 import {ROCKET_DESTRUCTION_RADIUS} from './rocket.js';
 
