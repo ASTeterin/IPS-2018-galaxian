@@ -1,12 +1,14 @@
 import { redraw } from './draw.js';
-import {AdvancedEnemy, moveAdvEnemy, shootingAdvEnemy, getAdvancedEnemyParam} from './enemy.js';
-import {createEnemys, moveEnemys, shootingEnemys} from './enemy.js';
-import {enemyConflictHandling, advEnemyConflictHandling} from './enemy.js';
+import {AdvancedEnemy, updateAdvancedEnemys, getAdvancedEnemyParam} from './enemy.js';
+import {createEnemys, updateEnemys} from './enemy.js';
+//import {enemyConflictHandling, advEnemyConflictHandling} from './enemy.js';
 import {Bullet, moveBullets} from './bullets.js';
 import {WIDHT, LEFT, RIGHT, MY_SHIP_SIZE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE} from './config.js';
 import {Ship, moveShip, myShipConflictHandling} from './ship.js';
-import {moveRockets} from './rocket.js';
-import {createStars, moveStar} from './star.js';
+import {updateRockets} from './rocket.js';
+import {createStars, updateStars} from './star.js';
+//import {hendleKeyDown, KeyPressedFlag} from './keyPressHendler.js';
+import {KEY_CODE_LEFT, KEY_CODE_RIGHT, KEY_CODE_ROCKETSHOOT, KEY_CODE_SHOOT} from './config.js';
 
 
 const SHIP_MOVEMENT_LINE = 30;
@@ -16,10 +18,6 @@ const BEGIN_HEALTH_STATE = 10;
 const BEGIN_COUNT_ROCKETS = 5;
 const ADV_ENEMY_HEALTH = 5;
 const ADV_ENEMY_LIFES = 3;
-const KEY_CODE_LEFT = 37;
-const KEY_CODE_RIGHT = 39;
-const KEY_CODE_SHOOT = 32;
-const KEY_CODE_ROCKETSHOOT = 17;
 
 
 function KeyPressedFlag({
@@ -35,30 +33,18 @@ function KeyPressedFlag({
 }
 
 
-function update({ship, deltaTime, direction, bullets, stars, enemys, enemyBullets, rockets, advEnemy}) {
-    let i = 0;
+
+function update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy}) {
     moveShip({ship, deltaTime});
     moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
-    if ((advEnemy) && (advEnemy.health > 0)) {
-        moveAdvEnemy({advEnemy, deltaTime, ship});
-        shootingAdvEnemy({advEnemy, deltaTime, enemyBullets});
-        advEnemyConflictHandling({advEnemy, bullets, rockets});
-    }
-    if (enemys.length != 0) {
-        moveEnemys({enemys, deltaTime});
-        enemyConflictHandling({enemys, bullets, rockets});
-        shootingEnemys({enemys, deltaTime, enemyBullets});
-    }
+    updateAdvancedEnemys({advEnemy, deltaTime, ship, bullets, enemyBullets, rockets});
+    updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets});
     moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
-    if (rockets.length != 0) {
-        moveRockets({rockets, deltaTime});
-    }
+    updateRockets({rockets, deltaTime})
     myShipConflictHandling({ship, enemyBullets});
-
-    for (const star of stars) {
-        moveStar({star, deltaTime});    
-    }
+    updateStars({stars, deltaTime});
 }
+
 
 function getDirection(current_direction)
 {
@@ -109,12 +95,16 @@ function main() {
         lifes: ADV_ENEMY_LIFES});}, 5000);
 
     let keyPressedFlag = new KeyPressedFlag({
-        left: false, 
+        left: false,    
         right: false,
         shoot: false,
         rocketShoot: false
     });
     createStars(stars);
+
+    //document.addEventListener("keydown", hendleKeyDown);
+
+
 
     document.addEventListener("keydown", (event) => {
         if (event.keyCode == KEY_CODE_LEFT) {

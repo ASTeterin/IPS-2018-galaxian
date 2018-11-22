@@ -12,4 +12,10 @@ function moveRockets({rockets, deltaTime}) {
     }
 }
 
-export {ROCKET_DESTRUCTION_RADIUS, moveRockets};
+function updateRockets({rockets, deltaTime}) {
+    if (rockets.length != 0) {
+        moveRockets({rockets, deltaTime});
+    }
+}
+
+export {ROCKET_DESTRUCTION_RADIUS, updateRockets};

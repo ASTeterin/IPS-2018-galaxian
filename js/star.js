@@ -27,5 +27,10 @@ function moveStar({star, deltaTime}) {
     }    
 }
 
+function updateStars({stars, deltaTime}) {
+    for (const star of stars) {
+        moveStar({star, deltaTime});    
+    }
+}
 
-export {createStars, moveStar};
+export {createStars, updateStars};
