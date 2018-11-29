@@ -3,12 +3,13 @@ import {AdvancedEnemy, updateAdvancedEnemys, getAdvancedEnemyParam} from './enem
 import {createEnemys, updateEnemys} from './enemy.js';
 //import {enemyConflictHandling, advEnemyConflictHandling} from './enemy.js';
 import {Bullet, moveBullets} from './bullets.js';
-import {WIDHT, LEFT, RIGHT, MY_SHIP_SIZE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE} from './config.js';
+import {WIDTH, LEFT, RIGHT, MY_SHIP_SIZE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE} from './config.js';
 import {Ship, moveShip, myShipConflictHandling} from './ship.js';
 import {updateRockets} from './rocket.js';
 import {createStars, updateStars} from './star.js';
 //import {hendleKeyDown, KeyPressedFlag} from './keyPressHendler.js';
 import {KEY_CODE_LEFT, KEY_CODE_RIGHT, KEY_CODE_ROCKETSHOOT, KEY_CODE_SHOOT} from './config.js';
+import {Garbage, moveGarbage} from './garbage.js';
 
 
 const SHIP_MOVEMENT_LINE = 30;
@@ -34,9 +35,11 @@ function KeyPressedFlag({
 
 
 
-function update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy}) {
+
+function update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage}) {
     moveShip({ship, deltaTime});
     moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
+    moveGarbage({garbage, deltaTime});
     updateAdvancedEnemys({advEnemy, deltaTime, ship, bullets, enemyBullets, rockets});
     updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets});
     moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
@@ -72,6 +75,13 @@ function main() {
     let stars = [];
     let enemys = [];
     let advEnemy = null;
+    let garbage = null;
+    
+
+    let garbageStartPositionX = 100;
+    let garbageStartPositionY = 0;
+    const garbageSize = 20;
+    const garbageContent = 'rockets';
 
     let direction = 0;
 
@@ -93,6 +103,13 @@ function main() {
         shootingTime: ADV_ENEMY_SHOOTING_TIME, 
         isShooting: false, 
         lifes: ADV_ENEMY_LIFES});}, 5000);
+
+     setTimeout(function() {garbage = new Garbage({
+        startX: garbageStartPositionX,
+        startY: garbageStartPositionY,
+        size: garbageSize,
+        content: garbageContent
+     })}, 1000);
 
     let keyPressedFlag = new KeyPressedFlag({
         left: false,    
@@ -160,7 +177,7 @@ function main() {
         
         if ((advEnemy) && (advEnemy.health <= 0) && advEnemy.lifes > 0)  {
            advEnemy.health = 5; 
-           advEnemy.x = - WIDHT * 10; 
+           advEnemy.x = - WIDTH * 10; 
            advEnemy.direction = 1, 
            advEnemy.lifes--;
         }
@@ -168,8 +185,8 @@ function main() {
         lastTimestamp = currentTimeStamp;
         ship.direction = getDirection(keyPressedFlag); 
         
-        update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy});    
-        redraw({ctx, ship, MY_SHIP_SIZE, width, height, bullets, stars, enemys, enemyBullets, rockets, advEnemy}); 
+        update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage});    
+        redraw({ctx, ship, MY_SHIP_SIZE, width, height, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage}); 
         
         if (ship.health == 0) {
             alert('GAME OVER    ');

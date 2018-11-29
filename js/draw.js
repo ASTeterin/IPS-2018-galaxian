@@ -1,9 +1,13 @@
+import {WIDTH, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ROCKET_HEIGHT, ADV_ENEMY_SHOOTING_TIME} from './config.js';
+
 const MY_BULLET_COLOR = "blue";
 const ENEMY_BULLET_COLOR = "red";
 const SIDE = 30;
 const STAR_SIZE = 1;
 const ENEMY_SIDE = 25;
-const BULLET_SIZE = 3;
+//const BULLET_SIZE = 3;
+
+
 
 
 
@@ -43,6 +47,13 @@ function drawStar(ctx, star) {
     ctx.fill();    
 }
 
+function drawGarbage(ctx, garbage) {
+    ctx.fillStyle = "green";
+    ctx.beginPath();
+    ctx.arc(garbage.x, garbage.y, garbage.size, 0, Math.PI * 2);
+    ctx.fill();    
+}
+
 function drawStars(ctx, stars) {
     for (const star of stars) {        
         drawStar(ctx, star);
@@ -59,22 +70,25 @@ function drawBullet({ctx, bullet, bulletColor}) {
 function drawRocket({ctx, rocket}) {
     ctx.fillStyle = "gold";
     ctx.beginPath();
-    ctx.fillRect(rocket.x, rocket.y, 3, 20);
+    ctx.fillRect(rocket.x, rocket.y, BULLET_SIZE, ROCKET_HEIGHT);
     ctx.fill();
 }
 
 function drawAdvEnemy(ctx, advEnemy) {
     ctx.fillStyle = "blue";
     ctx.beginPath();
-    ctx.fillRect(advEnemy.x, advEnemy.y, 20, 20);
+    ctx.fillRect(advEnemy.x, advEnemy.y, ENEMY_SIDE, ENEMY_SIDE);
     ctx.fill();
 }
 
 
-function redraw({ctx, ship, width, height, bullets, stars, enemys, enemyBullets, rockets, advEnemy}) {
+function redraw({ctx, ship, width, height, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage}) {
     drawCosmos(ctx, width, height);
     drawStars(ctx, stars);
     drawShip(ctx, ship, SIDE);
+    if (garbage) {
+        drawGarbage(ctx, garbage);
+    }
     if ((advEnemy) && (advEnemy.health > 0)) {
         drawAdvEnemy(ctx, advEnemy);
     }

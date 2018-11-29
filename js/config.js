@@ -1,5 +1,5 @@
 
-const WIDHT = 500;
+const WIDTH = 500;
 const HEIGHT = 1000;
 const LEFT = -1;
 const RIGHT = 1;
@@ -8,18 +8,22 @@ const COUNT_ENEMY_IN_LINE = 8;
 const ENEMY_LINE = 50;
 const ADV_ENEMY_LINE = 100;
 const BULLET_SIZE = 3;
+const ROCKET_HEIGHT = 20;
 const ADV_ENEMY_SHOOTING_TIME = 0.2;
 const MY_SHIP_SIZE = 30;
 const KEY_CODE_LEFT = 37;
 const KEY_CODE_RIGHT = 39;
 const KEY_CODE_SHOOT = 32;
 const KEY_CODE_ROCKETSHOOT = 17;
+const GARBAGE_SPEED = 200;
 
 
-export {WIDHT};
+export {WIDTH};
 export {HEIGHT};
 export {LEFT, RIGHT};
 export {COUNT_ENEMY_IN_LINE, ENEMY_LINE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE};
 export {MY_SHIP_SIZE};
 export {BULLET_SIZE};
 export {KEY_CODE_LEFT, KEY_CODE_RIGHT, KEY_CODE_ROCKETSHOOT, KEY_CODE_SHOOT};
+export {ROCKET_HEIGHT};
+export {GARBAGE_SPEED};

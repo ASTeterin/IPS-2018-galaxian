@@ -1,6 +1,7 @@
-import {WIDHT, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ADV_ENEMY_SHOOTING_TIME} from './config.js';
+import {WIDTH, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ROCKET_HEIGHT, ADV_ENEMY_SHOOTING_TIME} from './config.js';
 import {Bullet} from './bullets.js';
 import {ROCKET_DESTRUCTION_RADIUS} from './rocket.js';
+import { conflictHandling, rectangleConflictHandling } from './conflict.js';
 
 
 const ADV_ENEMY_START_POS = 100;
@@ -49,7 +50,7 @@ function createEnemys(enemys) {
     }
     for (let i = 0; i < COUNT_ENEMY_IN_LINE; i++) {
         enemys.push(new Enemy({
-            startX: (WIDHT / COUNT_ENEMY_IN_LINE) + 2 * i * ENEMY_SIDE + WIDHT * beginPosition, 
+            startX: (WIDTH / COUNT_ENEMY_IN_LINE) + 2 * i * ENEMY_SIDE + WIDTH * beginPosition, 
             startY: ENEMY_LINE, 
             direction: currDirection,
             shootingTime: Math.random() * 5,
@@ -63,19 +64,19 @@ function getAdvancedEnemyParam({advEnemyPosition, advEnemyDirection}) {
         advEnemyPosition = -ADV_ENEMY_START_POS;
         advEnemyDirection = 1;
     } else {
-        advEnemyPosition = WIDHT + ADV_ENEMY_START_POS;  
+        advEnemyPosition = WIDTH + ADV_ENEMY_START_POS;  
         advEnemyDirection = -1;  
     }   
 }
 
 function moveEnemys({enemys, deltaTime}) {
     let speedCoef = 1;
-    ((enemys[0].x < 0) || (enemys[enemys.length - 1].x > WIDHT))  ? speedCoef = 5: speedCoef = 1;
+    ((enemys[0].x < 0) || (enemys[enemys.length - 1].x > WIDTH))  ? speedCoef = 5: speedCoef = 1;
     for (const enemy of enemys) {
         enemy.x += ENEMY_HORIZONTAL_SPEED * speedCoef * deltaTime * enemy.direction;
     }
     if (((enemys[0].x <= ENEMY_SIDE) && (enemys[0].direction == LEFT)) || 
-    (((enemys[enemys.length - 1].x + ENEMY_SIDE) >= WIDHT - ENEMY_SIDE) && (enemys[enemys.length -1].direction == RIGHT))) {
+    (((enemys[enemys.length - 1].x + ENEMY_SIDE) >= WIDTH - ENEMY_SIDE) && (enemys[enemys.length -1].direction == RIGHT))) {
         for (const enemy of enemys) {
             enemy.direction *= -1;
         }   
@@ -87,29 +88,29 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
     let coef = 0;
 
     if ((ship.x - advEnemy.x <= 100) && (advEnemy.x - ship.x <= 100)) {
-        speedCoef = 0.5;
+        speedCoef = 1.5;
         advEnemy.isShooting = true;
     } else {
-        speedCoef = 2;
+        speedCoef = 3;
         advEnemy.isShooting = false;
     }
 
     advEnemy.x += ENEMY_HORIZONTAL_SPEED * deltaTime * speedCoef * advEnemy.direction;
     if (((ship.x > advEnemy.x) && (advEnemy.direction == RIGHT)) || ((ship.x < advEnemy.x) && (advEnemy.direction == LEFT))) {
          
-        //advEnemy.y = 1.5 * advEnemy.x  * advEnemy.d + 1.5 * Math.pow(WIDHT, - advEnemy.d);
+        //advEnemy.y = 1.5 * advEnemy.x  * advEnemy.d + 1.5 * Math.pow(WIDTH, - advEnemy.d);
         (advEnemy.direction == 1) ? coef = 0: coef = 1;
-        //advEnemy.y = WIDHT * coef - Math.sqrt(advEnemy.x * 500) *(-advEnemy.d);    
-        advEnemy.y = WIDHT * coef - advEnemy.x * (-advEnemy.direction);
+        //advEnemy.y = WIDTH * coef - Math.sqrt(advEnemy.x * 500) *(-advEnemy.d);    
+        advEnemy.y = WIDTH * coef - advEnemy.x * (-advEnemy.direction);
     }
 
-    if (((advEnemy.x >= 2 * WIDHT) && (advEnemy.direction == RIGHT)) || ((advEnemy.x < - WIDHT) && (advEnemy.direction == LEFT))) {
+    if (((advEnemy.x >= 2 * WIDTH) && (advEnemy.direction == RIGHT)) || ((advEnemy.x < - WIDTH) && (advEnemy.direction == LEFT))) {
         advEnemy.direction *= -1;
         advEnemy.y = ADV_ENEMY_START_POS;
-        (advEnemy.direction == 1) ? advEnemy.x = 0: advEnemy.x = WIDHT;
+        (advEnemy.direction == 1) ? advEnemy.x = 0: advEnemy.x = WIDTH;
     }
 }
-
+/*
 function conflictHandling({object1, objectSize1, object2, objectSize2}) {
     let isObject1LeftHandling = (object1.x + objectSize1 > object2.x);
     let isObject1RightHandling = (object1.x - objectSize1 < object2.x + objectSize2);
@@ -121,7 +122,7 @@ function conflictHandling({object1, objectSize1, object2, objectSize2}) {
     } else {
     return false;}
 }
-
+*/
 
 function advEnemyConflictHandling({advEnemy, bullets, rockets}) {
     for (let i = 0; i < bullets.length; i++) {
@@ -156,10 +157,18 @@ function enemyConflictHandling({enemys, bullets, rockets}) {
     for (let j = 0; j < rockets.length; j++) {
         if (rockets[j].y <= ENEMY_LINE) {
             for (let i = 0; i < enemys.length;) {
-                if (conflictHandling({object1: rockets[j], objectSize1: BULLET_SIZE + ROCKET_DESTRUCTION_RADIUS, object2: enemys[i], objectSize2: ENEMY_SIDE})) {
-               // if (((enemys[i].x  + ENEMY_SIDE > rockets[j].x - ROCKET_DESTRUCTION_RADIUS) && (enemys[i].x < rockets[j].x + ROCKET_DESTRUCTION_RADIUS))) {
+                if (rectangleConflictHandling({
+                        object1: rockets[j], 
+                        object1Width: BULLET_SIZE + ROCKET_DESTRUCTION_RADIUS, 
+                        object1Height: ROCKET_HEIGHT, 
+                        object2: enemys[i], 
+                        object2Width: ENEMY_SIDE,
+                        object2Height: ENEMY_SIDE
+                    })) {
                      enemys.splice(i, 1);
-                     isHit = true;
+                     //rockets.splice(j, 1);
+                     //break;
+                    isHit = true;
                 } else {
                     i++;
                 }
