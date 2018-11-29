@@ -9,12 +9,14 @@ function Ship({
     startY,
     direction,
     health,
+    lifes,
     countRockers    
 }) {
     this.x = startX;
     this.y = startY;
     this.direction = direction;
     this.health = health;
+    this.lifes = lifes;
     this.countRockers = countRockers;
 }
 

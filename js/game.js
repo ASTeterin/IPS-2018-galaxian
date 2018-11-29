@@ -3,13 +3,13 @@ import {AdvancedEnemy, updateAdvancedEnemys, getAdvancedEnemyParam} from './enem
 import {createEnemys, updateEnemys} from './enemy.js';
 //import {enemyConflictHandling, advEnemyConflictHandling} from './enemy.js';
 import {Bullet, moveBullets} from './bullets.js';
-import {WIDTH, LEFT, RIGHT, MY_SHIP_SIZE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE} from './config.js';
+import {WIDTH, LEFT, RIGHT, MY_SHIP_SIZE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE, COUNT_MY_LIFES} from './config.js';
 import {Ship, moveShip, myShipConflictHandling} from './ship.js';
 import {updateRockets} from './rocket.js';
 import {createStars, updateStars} from './star.js';
 //import {hendleKeyDown, KeyPressedFlag} from './keyPressHendler.js';
 import {KEY_CODE_LEFT, KEY_CODE_RIGHT, KEY_CODE_ROCKETSHOOT, KEY_CODE_SHOOT} from './config.js';
-import {Garbage, moveGarbage} from './garbage.js';
+import {Garbage, updateGarbage, getStartGarbagePosition} from './garbage.js';
 
 
 const SHIP_MOVEMENT_LINE = 30;
@@ -39,7 +39,9 @@ function KeyPressedFlag({
 function update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage}) {
     moveShip({ship, deltaTime});
     moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
-    moveGarbage({garbage, deltaTime});
+   //moveGarbage({garbage, deltaTime});
+    //garbageConflictHandling(garbage, bullets);
+    updateGarbage(garbage, deltaTime, bullets);
     updateAdvancedEnemys({advEnemy, deltaTime, ship, bullets, enemyBullets, rockets});
     updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets});
     moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
@@ -78,7 +80,7 @@ function main() {
     let garbage = null;
     
 
-    let garbageStartPositionX = 100;
+    let garbageStartPositionX = getStartGarbagePosition();
     let garbageStartPositionY = 0;
     const garbageSize = 20;
     const garbageContent = 'rockets';
@@ -90,6 +92,7 @@ function main() {
         startY: height - SHIP_MOVEMENT_LINE, 
         direction: direction,
         health: BEGIN_HEALTH_STATE,
+        lifes: COUNT_MY_LIFES,
         countRockers: BEGIN_COUNT_ROCKETS
     });
 
@@ -107,8 +110,10 @@ function main() {
      setTimeout(function() {garbage = new Garbage({
         startX: garbageStartPositionX,
         startY: garbageStartPositionY,
+        axis: garbageStartPositionX,
         size: garbageSize,
-        content: garbageContent
+        content: garbageContent,
+        isBonus: false
      })}, 1000);
 
     let keyPressedFlag = new KeyPressedFlag({
@@ -189,8 +194,13 @@ function main() {
         redraw({ctx, ship, MY_SHIP_SIZE, width, height, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage}); 
         
         if (ship.health == 0) {
-            alert('GAME OVER    ');
-            return 0;
+            if (ship.lifes == 0) {
+                alert('GAME OVER');
+                return 0;
+            } else {
+                ship.lifes--;
+                ship.health = BEGIN_HEALTH_STATE;
+            }
         }
         requestAnimationFrame(animateFn);
     }

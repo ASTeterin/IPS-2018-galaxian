@@ -12,7 +12,11 @@ function conflictHandling({object1, objectSize1, object2, objectSize2}) {
 }
 
 function ringConflictHandling({object1, objectSize1, object2, objectSize2}) {
-    //if (object1 + objectSize1 < object2 + objectSize2)   
+    let x = Math.pow(Math.abs(object1.x - object2.x), 2);
+    let y = Math.pow(Math.abs(object1.y - object2.y), 2);
+    if (Math.sqrt(x + y) <= objectSize1 + objectSize2) {
+        return true;
+    }
 }
 
 function rectangleConflictHandling({object1, object1Width, object1Height, object2, object2Width, object2Height}) {
@@ -27,4 +31,4 @@ function rectangleConflictHandling({object1, object1Width, object1Height, object
     return false;}    
 }
 
-export { conflictHandling, rectangleConflictHandling };
+export { conflictHandling, rectangleConflictHandling, ringConflictHandling };
