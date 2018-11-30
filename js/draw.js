@@ -5,6 +5,10 @@ const ENEMY_BULLET_COLOR = "red";
 const SIDE = 30;
 const STAR_SIZE = 1;
 const ENEMY_SIDE = 25;
+const scoreInfo = document.getElementById("scores");
+const lifeInfo = document.getElementById("lifes");
+const healthInfo = document.getElementById("health");
+
 //const BULLET_SIZE = 3;
 
 
@@ -103,7 +107,14 @@ function redraw({ctx, ship, width, height, bullets, stars, enemys, enemyBullets,
     }
     for (const rocket of rockets) {        
         drawRocket({ctx, rocket});
-    }   
+    }
+    showGameInfo(ship);  
+}
+
+function showGameInfo(ship) {
+    scoreInfo.innerHTML = ship.scores;
+    lifeInfo.innerHTML = ship.lifes;
+    healthInfo.innerHTML = ship.health;
 }
 
 export  { redraw };

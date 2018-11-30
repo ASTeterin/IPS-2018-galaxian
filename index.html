@@ -16,7 +16,27 @@
 </head>
 <body>
     <div class="container">
-        <canvas class="game_field" id="canvas" width="500" height="650"></canvas>
+        <div class="row">
+            <div class="container col-sm-2">
+                <div>Очки: </div>
+                <div class="info col-sm-3 " id="scores">
+                </div>
+                <div>Жизни</div>
+                <div id="lifes"></div>
+                <div>Здоровье</div>
+                <div id="health"></div>
+
+            </div>
+
+            <div class="container col-sm-8">
+                <canvas class="game_field" id="canvas" width="500" height="650"></canvas>
+                
+            </div>
+        </div>
+            
+                
+
+        
     </div>
     <script src="js/game.js" type="module"></script>
 

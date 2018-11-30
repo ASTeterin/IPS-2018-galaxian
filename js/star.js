@@ -22,7 +22,7 @@ function createStars(stars) {
 function moveStar({star, deltaTime}) {
     star.y += START_SPEED * deltaTime;
     if (star.y > HEIGHT) {
-        star.y = 0;
+        star.y = Math.random() * HEIGHT;
         star.x = Math.random() * WIDTH;
     }    
 }

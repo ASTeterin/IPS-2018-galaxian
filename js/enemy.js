@@ -145,12 +145,14 @@ function advEnemyConflictHandling({advEnemy, bullets, rockets}) {
     
 }
 
-function enemyConflictHandling({enemys, bullets, rockets}) {
+function enemyConflictHandling({enemys, bullets, rockets, ship}) {
     let isHit = false;
     for (const bullet of bullets) {
         for (let i = 0; i < enemys.length; i++) {
             if (conflictHandling({object1: bullet, objectSize1: BULLET_SIZE, object2: enemys[i], objectSize2: ENEMY_SIDE})) {
-                 enemys.splice(i, 1);
+                enemys.splice(i, 1);
+                ship.scores += 10;
+               
             }
         }
     }
@@ -165,9 +167,9 @@ function enemyConflictHandling({enemys, bullets, rockets}) {
                         object2Width: ENEMY_SIDE,
                         object2Height: ENEMY_SIDE
                     })) {
-                     enemys.splice(i, 1);
-                     //rockets.splice(j, 1);
-                     //break;
+                    enemys.splice(i, 1);
+                    ship.scores += 50;
+
                     isHit = true;
                 } else {
                     i++;
@@ -211,10 +213,10 @@ function updateAdvancedEnemys({advEnemy, deltaTime, ship, bullets, enemyBullets,
     }
 }
 
-function updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets}) {
+function updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets, ship}) {
     if (enemys.length != 0) {
         moveEnemys({enemys, deltaTime});
-        enemyConflictHandling({enemys, bullets, rockets});
+        enemyConflictHandling({enemys, bullets, rockets, ship});
         shootingEnemys({enemys, deltaTime, enemyBullets});
     }
 }

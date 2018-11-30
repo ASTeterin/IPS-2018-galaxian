@@ -1,11 +1,16 @@
 
 function conflictHandling({object1, objectSize1, object2, objectSize2}) {
-    let isObject1LeftHandling = (object1.x + objectSize1 > object2.x);
+    /*let isObject1LeftHandling = (object1.x + objectSize1 > object2.x);
     let isObject1RightHandling = (object1.x - objectSize1 < object2.x + objectSize2);
     let isObject1DownHandling = (object1.y - objectSize1 < object2.y + objectSize2);
-    let isObject1UpHandling = (object1.y - objectSize1 > object2.y);
+    let isObject1UpHandling = (object1.y - objectSize1 > object2.y);*/
 
-    if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling) && (isObject1UpHandling)) {
+    let isObject1LeftHandling = ((object2.x - object1.x) < objectSize1);
+    let isObject1RightHandling = ((object1.x - object2.x) < objectSize1 + objectSize2);
+    let isObject1DownHandling = (Math.abs( object1.y - object2.y) < objectSize1 + objectSize2);
+    let isObject1UpHandling = (Math.abs( object1.y - object2.y)  > objectSize1);
+
+    if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling) /*&& (isObject1UpHandling)*/) {
         return true;
     } else {
     return false;}

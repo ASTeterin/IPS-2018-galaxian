@@ -15,7 +15,7 @@ const KEY_CODE_LEFT = 37;
 const KEY_CODE_RIGHT = 39;
 const KEY_CODE_SHOOT = 32;
 const KEY_CODE_ROCKETSHOOT = 17;
-const GARBAGE_SPEED = 200;
+const GARBAGE_SPEED = 100;
 const COUNT_MY_LIFES = 3;
 
 

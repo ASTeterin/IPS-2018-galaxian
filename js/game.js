@@ -33,7 +33,11 @@ function KeyPressedFlag({
     this.rocketShoot = rocketShoot;
 }
 
-
+function deleteObject(object, value) {
+    if ((object) && (object.y > value)) {
+        object = null;
+    }
+}
 
 
 function update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage}) {
@@ -43,10 +47,10 @@ function update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets,
     //garbageConflictHandling(garbage, bullets);
     updateGarbage(garbage, deltaTime, bullets);
     updateAdvancedEnemys({advEnemy, deltaTime, ship, bullets, enemyBullets, rockets});
-    updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets});
+    updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets, ship});
     moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
     updateRockets({rockets, deltaTime})
-    myShipConflictHandling({ship, enemyBullets});
+    myShipConflictHandling({ship, enemyBullets, garbage});
     updateStars({stars, deltaTime});
 }
 
@@ -83,7 +87,7 @@ function main() {
     let garbageStartPositionX = getStartGarbagePosition();
     let garbageStartPositionY = 0;
     const garbageSize = 20;
-    const garbageContent = 'rockets';
+    const garbageContent = 'rocket';
 
     let direction = 0;
 
@@ -93,7 +97,9 @@ function main() {
         direction: direction,
         health: BEGIN_HEALTH_STATE,
         lifes: COUNT_MY_LIFES,
-        countRockers: BEGIN_COUNT_ROCKETS
+        isDemaged: false,
+        countRockers: BEGIN_COUNT_ROCKETS, 
+        scores: 0
     });
 
     getAdvancedEnemyParam({advEnemyPosition, advEnemyDirection});
@@ -202,6 +208,8 @@ function main() {
                 ship.health = BEGIN_HEALTH_STATE;
             }
         }
+
+        deleteObject(garbage, WIDTH);
         requestAnimationFrame(animateFn);
     }
     animateFn();

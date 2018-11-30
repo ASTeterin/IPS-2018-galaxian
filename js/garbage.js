@@ -46,10 +46,12 @@ function garbageConflictHandling(garbage, bullets) {
             })) {
                 bullets.splice(i, 1);
                 garbage.size = 10;
+                garbage.isBonus = true;
             }
         }
     }
 }
+
 
 function updateGarbage(garbage, deltaTime, bullets) {
     if (garbage) {
