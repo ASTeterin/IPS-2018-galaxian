@@ -33,9 +33,9 @@ function KeyPressedFlag({
     this.rocketShoot = rocketShoot;
 }
 
-function deleteObject(object, value) {
-    if ((object) && (object.y > value)) {
-        object = null;
+function deleteObject(objects, value) {
+    if ((objects[0]) && (objects[0].y > value)) {
+        objects.slice(0, 1);
     }
 }
 
@@ -80,14 +80,10 @@ function main() {
     let rockets = [];
     let stars = [];
     let enemys = [];
+    let garbages = [];
     let advEnemy = null;
     let garbage = null;
     
-
-    let garbageStartPositionX = getStartGarbagePosition();
-    let garbageStartPositionY = 0;
-    const garbageSize = 20;
-    const garbageContent = 'rocket';
 
     let direction = 0;
 
@@ -113,14 +109,7 @@ function main() {
         isShooting: false, 
         lifes: ADV_ENEMY_LIFES});}, 5000);
 
-     setTimeout(function() {garbage = new Garbage({
-        startX: garbageStartPositionX,
-        startY: garbageStartPositionY,
-        axis: garbageStartPositionX,
-        size: garbageSize,
-        content: garbageContent,
-        isBonus: false
-     })}, 1000);
+    setTimeout(function() {garbage = new Garbage({ })}, 1000);
 
     let keyPressedFlag = new KeyPressedFlag({
         left: false,    
@@ -209,7 +198,10 @@ function main() {
             }
         }
 
-        deleteObject(garbage, WIDTH);
+       /* deleteObject(garbages, WIDTH);
+        if (!garbages[0]) {
+            garbages.push = new Garbage();
+        }*/
         requestAnimationFrame(animateFn);
     }
     animateFn();

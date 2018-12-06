@@ -51,7 +51,7 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
     if ((garbage) && (conflictHandling({object1: garbage, objectSize1: garbage.size, object2: ship, objectSize2:MY_SHIP_SIZE}))) {
         if (!garbage.isBonus) {
             ship.health = 0;
-            garbage.y = 2 * HEIGHT;
+            garbage.y = -2 * HEIGHT;
         } else {
             switch (garbage.content) {
                 case 'rocket':
@@ -63,13 +63,12 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
                 case 'bomb':
                     ship.bomb++;
             }
-            garbage.y = 2 * HEIGHT;
+            garbage.y = -2 * HEIGHT;
         }
     }
 
     if (ship.isDemaged) {
         ship.health--;
-        console.log(ship.health);//
         ship.isDemaged = false;
     }
 }

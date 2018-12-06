@@ -7,7 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Подключаем Bootstrap CSS -->
+
     <link rel="stylesheet" href="web/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="web/css/main.css">
 
 
 
@@ -17,21 +19,21 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="container col-sm-2">
+            <div class="col-sm-2">
                 <div>Очки: </div>
-                <div class="info col-sm-3 " id="scores">
-                </div>
+                <div id="scores"></div>
                 <div>Жизни</div>
+                <img src="web/img/hero.png" id="ship"/>
                 <div id="lifes"></div>
                 <div>Здоровье</div>
                 <div id="health"></div>
 
             </div>
 
-            <div class="container col-sm-8">
-                <canvas class="game_field" id="canvas" width="500" height="650"></canvas>
-                
+            <div class="game_field col">
+                <canvas id="canvas" width="500" height="650"></canvas>
             </div>
+            <div class="col-sm-2"></div>
         </div>
             
                 

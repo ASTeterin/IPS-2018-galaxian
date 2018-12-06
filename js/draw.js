@@ -15,23 +15,35 @@ const healthInfo = document.getElementById("health");
 
 
 
-function drawShip(ctx, ship, side) {   
-    ctx.fillStyle = "red";
+function drawShip(ctx, ship, side) {  
+    
+    //var img = document.getElementById ('ship');
+    var img = new Image();
+    img.src = 'web/img/hero.png';
+    //img.src="http://www.minkbooks.com/content/snow.jpg";
+
+    /*ctx.fillStyle = "red";
     ctx.beginPath();
     ctx.moveTo(ship.x, ship.y);
     ctx.lineTo(ship.x + side,  ship.y);
     ctx.lineTo(ship.x + side / 2, ship.y - side * Math.cos(Math.PI / 3));
-    ctx.fill();
+    ctx.fill();*/
+    //ctx.drawImage('../web/img/galaxian.jpg', ship.x, ship.y);
+    ctx.drawImage(img, ship.x, ship.y - side);
 
 }
 
 function drawEnemy(ctx, enemy) {        
-    ctx.fillStyle = "green";
+    /*ctx.fillStyle = "green";
     ctx.beginPath();
     ctx.moveTo(enemy.x, enemy.y);
     ctx.lineTo(enemy.x + ENEMY_SIDE,  enemy.y);
     ctx.lineTo(enemy.x + ENEMY_SIDE / 2, enemy.y + ENEMY_SIDE * Math.cos(Math.PI / 3));
-    ctx.fill();
+    ctx.fill();*/
+    var img = new Image();
+    img.src = 'web/img/enemy1_1.png';
+    ctx.drawImage(img, enemy.x, enemy.y);
+
 }
 
 
@@ -52,10 +64,14 @@ function drawStar(ctx, star) {
 }
 
 function drawGarbage(ctx, garbage) {
-    ctx.fillStyle = "green";
+    /*ctx.fillStyle = "green";
     ctx.beginPath();
     ctx.arc(garbage.x, garbage.y, garbage.size, 0, Math.PI * 2);
-    ctx.fill();    
+    ctx.fill();  */
+    
+    var img = new Image();
+    img.src = 'web/img/garbage.jpg';
+    ctx.drawImage(img, garbage.x, garbage.y);
 }
 
 function drawStars(ctx, stars) {
@@ -79,10 +95,13 @@ function drawRocket({ctx, rocket}) {
 }
 
 function drawAdvEnemy(ctx, advEnemy) {
-    ctx.fillStyle = "blue";
+   /* ctx.fillStyle = "blue";
     ctx.beginPath();
     ctx.fillRect(advEnemy.x, advEnemy.y, ENEMY_SIDE, ENEMY_SIDE);
-    ctx.fill();
+    ctx.fill();*/
+    var img = new Image();
+    img.src = 'web/img/enemy2.jpg';
+    ctx.drawImage(img, advEnemy.x - 15, advEnemy.y - 30);
 }
 
 

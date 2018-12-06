@@ -1,0 +1,45 @@
+{% extends "layout.twig" %}
+
+{% block title %}Galaxian{% endblock %}
+
+{% block content %}
+
+    <div class="container personal_accaunt text_color">
+        <div class="row">
+            <h1 class="personal_accaunt_header">Лучшие результаты</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <table class="table col-sm-8">
+                <thead>
+                    <tr>
+                    <th>#</th>
+                    <th>Логин</th>
+                    <th>Дата рекорда</th>
+                    <th>Очки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in records %}
+                        <tr>
+                        <th scope="row">{{ item.position }}</th>
+                        <td>{{ item.name }}</td>
+                        <td>07-11-2018 22:03</td>
+                        <td>{{ item.score }}</td>
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-1"></div>
+            <button type="button" class="btn btn-outline-primary btn-block btn_menu col-sm-2" onclick="window.location = 'personal_accaunt.php'">
+                Выход
+            </button>
+        </div>
+
+    </div>
+
+{% endblock %}

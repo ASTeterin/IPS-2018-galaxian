@@ -1,21 +1,16 @@
 
 import {HEIGHT, WIDTH, GARBAGE_SPEED, BULLET_SIZE} from './config.js';
 import {ringConflictHandling} from './conflict.js';
+const GARBAGE_SIZE = 20;
+const BONUS_SIZE = 10;
 
-function Garbage({
-    startX,
-    startY,
-    axis,
-    size,
-    content,
-    isBonus
-}) {
-    this.x = startX;
-    this.y = startY;
-    this.axis = axis;
-    this.size = size;
-    this.content = content;
-    this.isBonus = isBonus;
+function Garbage() {
+    this.x = getStartGarbagePosition();
+    this.y = -100;
+    this.axis = this.x;
+    this.size = GARBAGE_SIZE;
+    this.content = getGarbageContent();
+    this.isBonus = false;
 }
 
 function getStartGarbagePosition()
@@ -23,15 +18,33 @@ function getStartGarbagePosition()
     return (Math.random() * WIDTH);
 }
 
+function getGarbageContent() {
+    let content = '';
+    let temp = Math.random() * 10;
+    if ((temp > 0) && (temp < 5)) {
+        content = 'rockets';
+    } else if ((temp >= 5) && (temp < 10)) {
+        content = 'lifes';
+    } 
+    return content;
+    
+}
+
 function moveGarbage(garbage, deltaTime) {
     if (garbage) {
         if (garbage.y <= HEIGHT) {
-            garbage.y += deltaTime * GARBAGE_SPEED * 0.6;
+            if ((garbage.y >= -10) && (garbage.y < 0)) {
+                garbage.content = getGarbageContent();
+                garbage.x = getStartGarbagePosition();
+            }
+            garbage.y += deltaTime * GARBAGE_SPEED * 2.6;
             if (!garbage.isBonus) {
                 garbage.x = 50 * Math.sin(garbage.y * 7 / WIDTH) + garbage.axis;
             } else {
                 garbage.x = garbage.axis;
             }
+        } else {
+            garbage.y = -2 * HEIGHT;
         }
     }
 }
@@ -45,7 +58,7 @@ function garbageConflictHandling(garbage, bullets) {
                 objectSize2: BULLET_SIZE
             })) {
                 bullets.splice(i, 1);
-                garbage.size = 10;
+                garbage.size = BONUS_SIZE;
                 garbage.isBonus = true;
             }
         }

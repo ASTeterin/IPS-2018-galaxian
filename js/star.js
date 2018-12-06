@@ -1,7 +1,7 @@
 import {HEIGHT, WIDTH} from './config.js';
 
 const START_SPEED = 100;
-const COUNT_STARS = 50;
+const COUNT_STARS = 150;
 
 function Star({
     startX,
@@ -22,7 +22,7 @@ function createStars(stars) {
 function moveStar({star, deltaTime}) {
     star.y += START_SPEED * deltaTime;
     if (star.y > HEIGHT) {
-        star.y = Math.random() * HEIGHT;
+        star.y = Math.random() * HEIGHT - 500;
         star.x = Math.random() * WIDTH;
     }    
 }
