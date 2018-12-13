@@ -10,19 +10,23 @@
     <!-- Подключаем Bootstrap CSS -->
     <link rel="stylesheet" href="web/css/bootstrap.min.css">
     <link rel="stylesheet" href="web/css/main.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
             {% block header %} 
-                {% include "header.twig" %}
+                
             {% endblock %}
         </div>
 
        
 
         <div class="content container-fluid">
-            {% block content %} {% endblock %}
+            {% block content %} 
+            
+            {% endblock %}
         </div>
     </div>
    

@@ -57,6 +57,12 @@ html
     align-items: center;
 }
 
+.aboutGameModal 
+{
+    opacity: 1;
+    display: block;
+}
+
 .img_game_header
 {
     width: 100%;
@@ -66,7 +72,11 @@ html
     margin: 0 0 50px 0;
 }
 
-
+.modal_window
+{
+    color: grey;
+    margin: 0 auto;
+}
 
 
 .container canvas

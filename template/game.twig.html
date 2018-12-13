@@ -1,0 +1,82 @@
+{% extends "layout.twig" %}
+
+{% block title %}Galaxian{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2">
+            <div>Очки: </div>
+            <div id="scores"></div>
+            <div>Жизни</div>
+            <img src="web/img/hero.png" id="ship"/>
+            <div id="lifes"></div>
+            <div>Здоровье</div>
+            <div id="health"></div>
+            <div>Ракеты</div>
+            <div id="rockets"></div>
+
+        </div>
+
+        <div class="game_field col">
+            <canvas id="canvas" width="500" height="650"></canvas>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+
+    
+    <div class="modal-sm modal fade show modal_window" id="exitModal" tabindex="-1" data-keyboard="true" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content stars">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Регистрация</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Покинуть игру?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="exitGameBnt" class="btn btn-primary" onclick = "window.location = 'personal_accaunt.php'">Да</button>
+                    <button type="button" id="stayInGameBnt" class="btn btn-primary">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade show modal_window aboutGameModal" id="about_game_modal" tabindex="-1" data-keyboard="false" role="dialog" aria-labelledby="aboutGamelLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content stars">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Описание</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3>Цель игры</h3>
+                    <p>Необходимо уничтожить все штурмовики противника. За уничтожение обычного вражеского корабля начисляется 10 очков, 
+                        за уничтожение штурмовика - 50.</p>
+                    <h3>Управление</h3>
+                    <p>
+                        <span>
+                            Управление кораблем осуществляется кнопками влево и вправо. Cтрельба - Space? стрельба ракетами
+                            <img src="./web/img/ctrl.jpg">
+                        </span>. Для паузы необходимо нажать Esc/
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="begin_play_bnt" class="btn btn-primary">Начать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+
+    
+</div>
+<script src="js/game.js" type="module"></script>
+
+{% endblock %}

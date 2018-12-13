@@ -8,6 +8,7 @@ const ENEMY_SIDE = 25;
 const scoreInfo = document.getElementById("scores");
 const lifeInfo = document.getElementById("lifes");
 const healthInfo = document.getElementById("health");
+const rocketsInfo = document.getElementById("rockets");
 
 //const BULLET_SIZE = 3;
 
@@ -70,7 +71,11 @@ function drawGarbage(ctx, garbage) {
     ctx.fill();  */
     
     var img = new Image();
-    img.src = 'web/img/garbage.jpg';
+    if (!garbage.isBonus) {    
+        img.src = 'web/img/garbage.jpg';
+    } else {
+        img.src = 'web/img/prize.png';
+    }
     ctx.drawImage(img, garbage.x, garbage.y);
 }
 
@@ -95,13 +100,9 @@ function drawRocket({ctx, rocket}) {
 }
 
 function drawAdvEnemy(ctx, advEnemy) {
-   /* ctx.fillStyle = "blue";
-    ctx.beginPath();
-    ctx.fillRect(advEnemy.x, advEnemy.y, ENEMY_SIDE, ENEMY_SIDE);
-    ctx.fill();*/
     var img = new Image();
     img.src = 'web/img/enemy2.jpg';
-    ctx.drawImage(img, advEnemy.x - 15, advEnemy.y - 30);
+    ctx.drawImage(img, advEnemy.x, advEnemy.y - 30);
 }
 
 
@@ -134,6 +135,7 @@ function showGameInfo(ship) {
     scoreInfo.innerHTML = ship.scores;
     lifeInfo.innerHTML = ship.lifes;
     healthInfo.innerHTML = ship.health;
+    rocketsInfo.innerHTML = ship.countRockets;
 }
 
 export  { redraw };

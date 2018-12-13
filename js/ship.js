@@ -1,4 +1,4 @@
-import {BULLET_SIZE, MY_SHIP_SIZE, WIDTH, LEFT, RIGHT, HEIGHT} from './config.js';
+import {SHIP_PARAMS, BULLET_SIZE, WIDTH, LEFT, RIGHT, HEIGHT} from './config.js';
 import { conflictHandling } from './conflict.js';
 import { Bullet } from './bullets.js';
 
@@ -11,7 +11,7 @@ function Ship({
     health,
     lifes,
     isDemaged,
-    countRockers, 
+    countRockets, 
     scores,    
 }) {
     this.x = startX;
@@ -20,27 +20,39 @@ function Ship({
     this.health = health;
     this.lifes = lifes;
     this.isDemaged = isDemaged;
-    this.countRockers = countRockers;
+    this.countRockets = countRockets;
     this.scores = scores;
 }
 
+
+
 function moveShip({ship, deltaTime}) {
     let isNoConflictLeftBorder = ((ship.x > 0) && (ship.direction == LEFT));
-    let isNoConflictRightBorder = ((ship.x + MY_SHIP_SIZE < WIDTH) && (ship.direction == RIGHT));
+    let isNoConflictRightBorder = ((ship.x + SHIP_PARAMS.MY_SHIP_SIZE < WIDTH) && (ship.direction == RIGHT));
     if (isNoConflictLeftBorder || isNoConflictRightBorder) {
         ship.x += SHIP_SPEED * deltaTime * ship.direction;
     }   
+}
+
+function createShip(width, health)
+{
+    return new Ship({
+        startX: (width - SHIP_PARAMS.MY_SHIP_SIZE) / 2, 
+        startY: health - SHIP_PARAMS.SHIP_MOVEMENT_LINE, 
+        direction: 0,
+        health: SHIP_PARAMS.BEGIN_HEALTH_STATE,
+        lifes: SHIP_PARAMS.COUNT_MY_LIFES,
+        isDemaged: false,
+        countRockets: SHIP_PARAMS.BEGIN_COUNT_ROCKETS, 
+        scores: 0
+    });
 }
 
 function myShipConflictHandling({ship, enemyBullets, garbage}) {
    
     let isGarbageContact = false;
     for (let i = 0; i < enemyBullets.length; i++) {
-        /*let isLeftSideShipConflict = (ship.x < enemyBullets[i].x + BULLET_SIZE);
-        let isRightSideShipConflict = (ship.x + MY_SHIP_SIZE > enemyBullets[i].x - BULLET_SIZE); 
-        let isFrontSideShipConflict = (Math.abs(ship.y - enemyBullets[i].y) < BULLET_SIZE);
-        if ((isLeftSideShipConflict) && (isRightSideShipConflict) && (isFrontSideShipConflict))*/ 
-        if (conflictHandling({object1: enemyBullets[i], objectSize1: BULLET_SIZE, object2: ship, objectSize2: MY_SHIP_SIZE}))
+        if (conflictHandling({object1: enemyBullets[i], objectSize1: BULLET_SIZE, object2: ship, objectSize2: SHIP_PARAMS.MY_SHIP_SIZE}))
         {
             ship.isDemaged = true;
             enemyBullets.splice(i, 1);
@@ -48,14 +60,14 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
         }
     }
 
-    if ((garbage) && (conflictHandling({object1: garbage, objectSize1: garbage.size, object2: ship, objectSize2:MY_SHIP_SIZE}))) {
+    if ((garbage) && (conflictHandling({object1: garbage, objectSize1: garbage.size, object2: ship, objectSize2: SHIP_PARAMS.MY_SHIP_SIZE}))) {
         if (!garbage.isBonus) {
             ship.health = 0;
-            garbage.y = -2 * HEIGHT;
+            //garbage.y = -2 * HEIGHT;
         } else {
             switch (garbage.content) {
                 case 'rocket':
-                    ship.countRockers += 5;
+                    ship.countRockets += 5;
                     break;
                 case 'life':
                     ship.lifes++;
@@ -63,8 +75,11 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
                 case 'bomb':
                     ship.bomb++;
             }
-            garbage.y = -2 * HEIGHT;
+            garbage.isBonus = false;
+            
         }
+        garbage.x = Math.random() * WIDTH;
+        garbage.y = -2 * HEIGHT;
     }
 
     if (ship.isDemaged) {
@@ -75,4 +90,4 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
 
 
 export {moveShip, myShipConflictHandling};
-export {Ship};
+export {Ship, createShip};

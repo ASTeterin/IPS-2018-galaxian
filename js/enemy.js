@@ -221,6 +221,16 @@ function updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets, ship})
     }
 }
 
+function createNewAdvEnemy(advEnemy)
+{
+    if ((advEnemy) && (advEnemy.health <= 0) && advEnemy.lifes > 0)  {
+        advEnemy.health = 5; 
+        advEnemy.x = - WIDTH * 10; 
+        advEnemy.direction = 1, 
+        advEnemy.lifes--;
+     }
+}
+
 export {Enemy};
 export {AdvancedEnemy, updateAdvancedEnemys};
 export {createEnemys, updateEnemys};
@@ -228,4 +238,4 @@ export {shootingEnemys};
 export {shootingAdvEnemy};
 export {getAdvancedEnemyParam};
 export {advEnemyConflictHandling};
-export {enemyConflictHandling};
+export {enemyConflictHandling, createNewAdvEnemy};

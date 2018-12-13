@@ -6,7 +6,7 @@ const BONUS_SIZE = 10;
 
 function Garbage() {
     this.x = getStartGarbagePosition();
-    this.y = -100;
+    this.y = -10000;
     this.axis = this.x;
     this.size = GARBAGE_SIZE;
     this.content = getGarbageContent();
@@ -22,9 +22,9 @@ function getGarbageContent() {
     let content = '';
     let temp = Math.random() * 10;
     if ((temp > 0) && (temp < 5)) {
-        content = 'rockets';
+        content = 'rocket';
     } else if ((temp >= 5) && (temp < 10)) {
-        content = 'lifes';
+        content = 'life';
     } 
     return content;
     
@@ -58,7 +58,7 @@ function garbageConflictHandling(garbage, bullets) {
                 objectSize2: BULLET_SIZE
             })) {
                 bullets.splice(i, 1);
-                garbage.size = BONUS_SIZE;
+                //garbage.size = BONUS_SIZE;
                 garbage.isBonus = true;
             }
         }

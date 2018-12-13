@@ -1,6 +1,10 @@
 <?php
 require_once("inc/common.inc.php");
 
+function getTopResult() {
+    $getTopResultQueryString = "SELECT * FROM result";
+}
+
 $vars = array('records' => array(
     array('position'=> '1', 'name' => 'Mark', 'score' => 500), 
     array('position'=> '2', 'name' => 'John', 'score' => 400), 
