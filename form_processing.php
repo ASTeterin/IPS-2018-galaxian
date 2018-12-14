@@ -6,15 +6,13 @@ require_once("inc/common.inc.php");
 $name = htmlspecialchars($_POST["username"] ?? ""); //TODO: check if parameters are passed
 $password = htmlspecialchars($_POST["password"] ?? "");
 $reenteredPassword = htmlspecialchars($_POST["confirmed_password"] ?? "");
-
-//TODO: place following function call in common.inc.php
+echo $password;
 
 
 //TODO: create user.inc.php module and getUserInfoByName(r$name) function
-$findUserQueryString = "SELECT user_name FROM " . USER_TABLE .  " WHERE user_name = '" . dbQuote($name)  . "'"; //TODO: quote all parameters in sql
+ //TODO: quote all parameters in sql
 
-$registredUsers = dbQueryGetResult($findUserQueryString);
-
+$registredUsers = getUserInfoByName($name);
 
 if (!empty($registredUsers)) {
     echo json_encode(['error_code' => 7]);
@@ -23,9 +21,9 @@ if (!empty($registredUsers)) {
 }
 
 //TODO: create registerUser($name, $pass) : $userId function
-$insertNewUserQueryString = "INSERT INTO " . USER_TABLE . " (user_name, user_password) VALUES ('" . $name . "', '" . $password . "')";
-$result = dbQuery($insertNewUserQueryString);
 
+$result = registerUser($name, $password);
+/*
 $redicet = $_SERVER['HTTP_REFERER'];
-@header ("Location: $redicet");
+@header ("Location: $redicet");*/
 echo json_encode(['success' => 1, 'user_id' => $userId]);

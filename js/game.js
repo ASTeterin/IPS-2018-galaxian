@@ -1,11 +1,12 @@
 import { redraw } from './draw.js';
 import {AdvancedEnemy, updateAdvancedEnemys, getAdvancedEnemyParam, createEnemys, updateEnemys, createNewAdvEnemy} from './enemy.js';
-import {Bullet, moveBullets} from './bullets.js';
+import {Bullet, moveBullets, createNewShoot} from './bullets.js';
 import {SHIP_PARAMS, WIDTH, LEFT, RIGHT, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE, HEIGHT} from './config.js';
-import {createShip, moveShip, myShipConflictHandling} from './ship.js';
+import {createShip, moveShip, myShipConflictHandling, getShipDirection} from './ship.js';
 import {updateRockets} from './rocket.js';
 import {createStars, updateStars} from './star.js';
-import {KEY_CODES} from './config.js';
+import {keyPressHendler} from './keyPressHendler.js';
+
 import {Garbage, updateGarbage} from './garbage.js';
 
 
@@ -32,29 +33,17 @@ function KeyPressedFlag({
     this.exit = exit;
 }
 
-function update({ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets, advEnemy, garbage}) {
-    moveShip({ship, deltaTime});
-    moveBullets({bullets: bullets, deltaTime, direction: MY_BULLET_DIRECTION});
-    updateGarbage(garbage, deltaTime, bullets);
-    updateAdvancedEnemys({advEnemy, deltaTime, ship, bullets, enemyBullets, rockets});
-    updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets, ship});
-    moveBullets({bullets: enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
-    updateRockets({rockets, deltaTime})
-    myShipConflictHandling({ship, enemyBullets, garbage});
-    updateStars({stars, deltaTime});
+function update({gameObjects, deltaTime}) {
+    moveShip({ship: gameObjects.ship, deltaTime});
+    moveBullets({bullets: gameObjects.bullets, deltaTime, direction: MY_BULLET_DIRECTION});
+    updateGarbage(gameObjects.garbage, deltaTime, gameObjects.bullets);
+    updateAdvancedEnemys({advEnemy: gameObjects.advEnemy, deltaTime, ship: gameObjects.ship, bullets: gameObjects.bullets, enemyBullets: gameObjects.enemyBullets, rockets: gameObjects.rockets});
+    updateEnemys({enemys: gameObjects.enemys, deltaTime, bullets: gameObjects.bullets, rockets: gameObjects.rockets, enemyBullets: gameObjects.enemyBullets, ship: gameObjects.ship});
+    moveBullets({bullets: gameObjects.enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
+    updateRockets({rockets: gameObjects.rockets, deltaTime})
+    myShipConflictHandling({ship: gameObjects.ship, enemyBullets: gameObjects.enemyBullets, garbage: gameObjects.garbage});
+    updateStars({stars: gameObjects.stars, deltaTime});
 }
-
-
-function getDirection(current_direction)
-{
-    if ((current_direction.left) && (!current_direction.right)) {
-        return LEFT;
-    }
-    if ((current_direction.right) && (!current_direction.left)) {
-        return RIGHT;
-    }
-}
-
 
 
 function modalWindowProcessing(keyPressedFlag) {
@@ -87,96 +76,57 @@ function createAdvEnemy(advEnemyPosition)
     });
 }
 
-function createNewRocketShoot(rockets, ship)
-{
-    rockets.push(new Bullet({
-        startX: ship.x + SHIP_PARAMS.MY_SHIP_SIZE / 2, 
-        startY: ship.y - SHIP_PARAMS.MY_SHIP_SIZE * Math.cos(Math.PI / 3)
-    }));
-    return rockets;
-}
 
 function GameObjects( width, height, advEnemyPosition)
 {
     this.ship = createShip(width, height);
     this.advEnemy = createAdvEnemy(advEnemyPosition);
+    this.bullets = [];
     this.rockets = [];
+    this.enemys = [];
+    this.enemyBullets = [];
     this.garbage = new Garbage({});
-    //this.stars = 
+    this.stars = [];
 }
-
-function keyPressHendler(keyPressedFlag, bullets, rockets, gameObjects)
+/*
+function flagsHendler(keyPressedFlag, gameObjects, bullets)
 {
-    document.addEventListener("keydown", (event) => {
-        if (event.keyCode == KEY_CODES.KEY_CODE_LEFT) {
-            keyPressedFlag.left = true;
-        }
-        if ((event.keyCode == KEY_CODES.KEY_CODE_RIGHT)) {
-            keyPressedFlag.right = true;
-        }
-        if ((event.keyCode == KEY_CODES.KEY_CODE_SHOOT) && (!keyPressedFlag.shoot)) {
-            keyPressedFlag.shoot = true;
-            bullets.push(new Bullet({
-                startX: gameObjects.ship.x + SHIP_PARAMS.MY_SHIP_SIZE / 2, 
-                startY: gameObjects.ship.y - SHIP_PARAMS.MY_SHIP_SIZE * Math.cos(Math.PI / 3)
-            }));
-        }
-
-        if ((event.keyCode == KEY_CODES.KEY_CODE_ROCKETSHOOT) && (!keyPressedFlag.rocketShoot)) {
-            if (gameObjects.ship.countRockets) {
-                keyPressedFlag.rocketShoot = true;
-                gameObjects.rockets = createNewRocketShoot(gameObjects.rockets, gameObjects.ship);
-                gameObjects.ship.countRockets--;
-            }
-        }
-
-        if (event.keyCode == KEY_CODES.KEY_CODE_PAUSE) {
-            
-            var exitModalWindow = document.getElementById('exitModal');
-            var display = window.getComputedStyle(exitModalWindow).display;
-            if (display == 'none') { 
-                exitModalWindow.style.display = 'block';
-                keyPressedFlag.exit = true;
-            } else {
-                exitModalWindow.style.display = 'none';
-                keyPressedFlag.exit = false;
-            }
-        }
-
-    })
-
-    document.addEventListener("keyup", (event) => {
-        if (event.keyCode == KEY_CODES.KEY_CODE_LEFT) {
-            keyPressedFlag.left = false;
-        }
-        if (event.keyCode == KEY_CODES.KEY_CODE_RIGHT) {
-            keyPressedFlag.right = false;
-        }
-        if (event.keyCode == KEY_CODES.KEY_CODE_SHOOT) {
-            keyPressedFlag.shoot = false;
-        }
-        if (event.keyCode == KEY_CODES.KEY_CODE_ROCKETSHOOT) {
-            keyPressedFlag.rocketShoot = false;
-        }
-    })
+    if ((keyPressedFlag.left) && (!keyPressedFlag.right)) {
+        gameObjects.ship.direction = LEFT;
+        //keyPressedFlag.left = false;
+        //return;
+    }
+    if ((keyPressedFlag.right) && (!keyPressedFlag.left)) {
+        gameObjects.ship.direction = RIGHT;
+        //keyPressedFlag.right = false;
+        //return;
+    }
+    if ((!keyPressedFlag.left) && (!keyPressedFlag.right)) {
+        gameObjects.ship.direction = 0;
+    }
+    if (keyPressedFlag.shoot) {
+        setTimeout(createNewShoot(bullets, gameObjects.ship), 5000);
+        keyPressedFlag.shoot = false;
+        return;
+    }
+    if (keyPressedFlag.rocketShoot) {
+        createNewShoot(gameObjects.rockets, gameObjects.ship);
+        keyPressedFlag.rocketShoot = false;
+        return;
+    }
 }
-
+*/
 
 
 function main() {
     const canvasEl = document.getElementById("canvas");
-
     const width = canvasEl.offsetWidth;
     const height = canvasEl.offsetHeight;
     const ctx = canvas.getContext('2d');
 
     let advEnemyPosition = 0;
     let advEnemyDirection = 0;
-
-    let bullets = [];
-    let enemyBullets = [];
-    let stars = [];
-    let enemys = [];
+    //let stars = [];
     let gameObjects = null;
     
     
@@ -189,8 +139,9 @@ function main() {
         rocketShoot: false,
         exit: true
     });
-    createStars(stars);
-    keyPressHendler(keyPressedFlag, bullets, rockets, gameObjects);
+    createStars(gameObjects.stars);
+    keyPressHendler(keyPressedFlag, gameObjects);
+    
 
     modalWindowProcessing(keyPressedFlag);
 
@@ -200,17 +151,17 @@ function main() {
         const currentTimeStamp = Date.now();
         const deltaTime = (currentTimeStamp - lastTimestamp) * 0.001; //сколько секунд прошло с прошлого кадра
 
-        if (enemys.length == 0) {
-            createEnemys(enemys);
+        if (gameObjects.enemys.length == 0) {
+            createEnemys(gameObjects.enemys);
         } 
         createNewAdvEnemy(gameObjects.advEnemy);
         
         lastTimestamp = currentTimeStamp;
-        gameObjects.ship.direction = getDirection(keyPressedFlag); 
+        gameObjects.ship.direction = getShipDirection(keyPressedFlag); 
         
         if (!keyPressedFlag.exit) {
-            update({ship: gameObjects.ship, deltaTime, bullets, stars, enemys, enemyBullets, rockets: gameObjects.rockets, advEnemy: gameObjects.advEnemy, garbage: gameObjects.garbage});    
-            redraw({ctx, ship: gameObjects.ship, width, height, bullets, stars, enemys, enemyBullets, rockets: gameObjects.rockets, advEnemy: gameObjects.advEnemy, garbage: gameObjects.garbage}); 
+            update({gameObjects, deltaTime});    
+            redraw({ctx, gameObjects, width, height}); 
         }
         if (gameObjects.ship.health == 0) {
             if (gameObjects.ship.lifes == 0) {

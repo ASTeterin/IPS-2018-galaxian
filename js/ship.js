@@ -1,6 +1,5 @@
 import {SHIP_PARAMS, BULLET_SIZE, WIDTH, LEFT, RIGHT, HEIGHT} from './config.js';
 import { conflictHandling } from './conflict.js';
-import { Bullet } from './bullets.js';
 
 const SHIP_SPEED = 100;
 
@@ -24,8 +23,6 @@ function Ship({
     this.scores = scores;
 }
 
-
-
 function moveShip({ship, deltaTime}) {
     let isNoConflictLeftBorder = ((ship.x > 0) && (ship.direction == LEFT));
     let isNoConflictRightBorder = ((ship.x + SHIP_PARAMS.MY_SHIP_SIZE < WIDTH) && (ship.direction == RIGHT));
@@ -48,9 +45,19 @@ function createShip(width, health)
     });
 }
 
+function getShipDirection(current_direction)
+{
+    if ((current_direction.left) && (!current_direction.right)) {
+        return LEFT;
+    }
+    if ((current_direction.right) && (!current_direction.left)) {
+        return RIGHT;
+    }
+    return null;
+}
+
 function myShipConflictHandling({ship, enemyBullets, garbage}) {
    
-    let isGarbageContact = false;
     for (let i = 0; i < enemyBullets.length; i++) {
         if (conflictHandling({object1: enemyBullets[i], objectSize1: BULLET_SIZE, object2: ship, objectSize2: SHIP_PARAMS.MY_SHIP_SIZE}))
         {
@@ -89,5 +96,5 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
 }
 
 
-export {moveShip, myShipConflictHandling};
+export {moveShip, myShipConflictHandling, getShipDirection};
 export {Ship, createShip};

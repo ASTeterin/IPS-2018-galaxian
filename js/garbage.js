@@ -6,7 +6,7 @@ const BONUS_SIZE = 10;
 
 function Garbage() {
     this.x = getStartGarbagePosition();
-    this.y = -10000;
+    this.y = -1000;
     this.axis = this.x;
     this.size = GARBAGE_SIZE;
     this.content = getGarbageContent();
