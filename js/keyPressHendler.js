@@ -1,12 +1,10 @@
 import {KEY_CODES} from './config.js';
-import {Bullet, createNewShoot} from './bullets.js';
-import {SHIP_PARAMS, WIDTH, LEFT, RIGHT, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE, HEIGHT} from './config.js';
 
 function KeyPressedFlag({
     left,
     right,
     shoot,
-    rocketShoot
+    rocketShoot,
 }) {
     this.left = left;
     this.right = right;
@@ -14,9 +12,8 @@ function KeyPressedFlag({
     this.rocketShoot = rocketShoot;
 }
 
-function keyPressHendler(keyPressedFlag, gameObjects)
-{
-    document.addEventListener("keydown", (event) => {
+function keyPressHendler(keyPressedFlag, gameObjects) {
+    document.addEventListener('keydown', (event) => {
         if (event.keyCode == KEY_CODES.KEY_CODE_LEFT) {
             keyPressedFlag.left = true;
         }
@@ -25,22 +22,21 @@ function keyPressHendler(keyPressedFlag, gameObjects)
         }
         if ((event.keyCode == KEY_CODES.KEY_CODE_SHOOT) && (!keyPressedFlag.shoot)) {
             keyPressedFlag.shoot = true;
-            gameObjects.bullets = createNewShoot(gameObjects.bullets, gameObjects.ship);
+            //gameObjects.bullets = createNewShoot(gameObjects.bullets, gameObjects.ship);
         }
 
         if ((event.keyCode == KEY_CODES.KEY_CODE_ROCKETSHOOT) && (!keyPressedFlag.rocketShoot)) {
             if (gameObjects.ship.countRockets) {
                 keyPressedFlag.rocketShoot = true;
-                gameObjects.rockets = createNewShoot(gameObjects.rockets, gameObjects.ship);
-                gameObjects.ship.countRockets--;
+                //gameObjects.rockets = createNewShoot(gameObjects.rockets, gameObjects.ship);
+                //gameObjects.ship.countRockets--;
             }
         }
 
         if (event.keyCode == KEY_CODES.KEY_CODE_PAUSE) {
-            
-            var exitModalWindow = document.getElementById('exitModal');
-            var display = window.getComputedStyle(exitModalWindow).display;
-            if (display == 'none') { 
+            const exitModalWindow = document.getElementById('exitModal');
+            const display = window.getComputedStyle(exitModalWindow).display;
+            if (display == 'none') {
                 exitModalWindow.style.display = 'block';
                 keyPressedFlag.exit = true;
             } else {
@@ -48,10 +44,9 @@ function keyPressHendler(keyPressedFlag, gameObjects)
                 keyPressedFlag.exit = false;
             }
         }
+    });
 
-    })
-
-    document.addEventListener("keyup", (event) => {
+    document.addEventListener('keyup', (event) => {
         if (event.keyCode == KEY_CODES.KEY_CODE_LEFT) {
             keyPressedFlag.left = false;
         }
@@ -64,8 +59,7 @@ function keyPressHendler(keyPressedFlag, gameObjects)
         if (event.keyCode == KEY_CODES.KEY_CODE_ROCKETSHOOT) {
             keyPressedFlag.rocketShoot = false;
         }
-    })
-
+    });
 }
 
-export { keyPressHendler, KeyPressedFlag };
+export {keyPressHendler, KeyPressedFlag};

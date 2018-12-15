@@ -1,5 +1,5 @@
 import {SHIP_PARAMS, BULLET_SIZE, WIDTH, LEFT, RIGHT, HEIGHT} from './config.js';
-import { conflictHandling } from './conflict.js';
+import {conflictHandling} from './conflict.js';
 
 const SHIP_SPEED = 100;
 
@@ -10,8 +10,9 @@ function Ship({
     health,
     lifes,
     isDemaged,
-    countRockets, 
-    scores,    
+    countRockets,
+    scores,
+    canShoot,
 }) {
     this.x = startX;
     this.y = startY;
@@ -21,31 +22,32 @@ function Ship({
     this.isDemaged = isDemaged;
     this.countRockets = countRockets;
     this.scores = scores;
+    this.canShoot = canShoot;
 }
 
 function moveShip({ship, deltaTime}) {
-    let isNoConflictLeftBorder = ((ship.x > 0) && (ship.direction == LEFT));
-    let isNoConflictRightBorder = ((ship.x + SHIP_PARAMS.MY_SHIP_SIZE < WIDTH) && (ship.direction == RIGHT));
+    const isNoConflictLeftBorder = ((ship.x > 0) && (ship.direction == LEFT));
+    const isNoConflictRightBorder = ((ship.x + SHIP_PARAMS.MY_SHIP_SIZE < WIDTH) && (ship.direction == RIGHT));
     if (isNoConflictLeftBorder || isNoConflictRightBorder) {
         ship.x += SHIP_SPEED * deltaTime * ship.direction;
-    }   
+    }
 }
 
-function createShip(width, health)
-{
+function createShip(width, health) {
     return new Ship({
-        startX: (width - SHIP_PARAMS.MY_SHIP_SIZE) / 2, 
-        startY: health - SHIP_PARAMS.SHIP_MOVEMENT_LINE, 
+        startX: (width - SHIP_PARAMS.MY_SHIP_SIZE) / 2,
+        startY: health - SHIP_PARAMS.SHIP_MOVEMENT_LINE,
         direction: 0,
         health: SHIP_PARAMS.BEGIN_HEALTH_STATE,
         lifes: SHIP_PARAMS.COUNT_MY_LIFES,
         isDemaged: false,
-        countRockets: SHIP_PARAMS.BEGIN_COUNT_ROCKETS, 
-        scores: 0
+        countRockets: SHIP_PARAMS.BEGIN_COUNT_ROCKETS,
+        scores: 0,
+        canShoot: true,
     });
 }
 
-function getShipDirection(current_direction)
+/*function getShipDirection(current_direction)
 {
     if ((current_direction.left) && (!current_direction.right)) {
         return LEFT;
@@ -54,16 +56,14 @@ function getShipDirection(current_direction)
         return RIGHT;
     }
     return null;
-}
+}*/
 
 function myShipConflictHandling({ship, enemyBullets, garbage}) {
-   
     for (let i = 0; i < enemyBullets.length; i++) {
-        if (conflictHandling({object1: enemyBullets[i], objectSize1: BULLET_SIZE, object2: ship, objectSize2: SHIP_PARAMS.MY_SHIP_SIZE}))
-        {
+        if (conflictHandling({object1: enemyBullets[i], objectSize1: BULLET_SIZE, object2: ship, objectSize2: SHIP_PARAMS.MY_SHIP_SIZE})) {
             ship.isDemaged = true;
             enemyBullets.splice(i, 1);
-            break;  
+            break;
         }
     }
 
@@ -73,17 +73,16 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
             //garbage.y = -2 * HEIGHT;
         } else {
             switch (garbage.content) {
-                case 'rocket':
-                    ship.countRockets += 5;
-                    break;
-                case 'life':
-                    ship.lifes++;
-                    break;
-                case 'bomb':
-                    ship.bomb++;
+            case 'rocket':
+                ship.countRockets += 5;
+                break;
+            case 'life':
+                ship.lifes++;
+                break;
+            case 'bomb':
+                ship.bomb++;
             }
             garbage.isBonus = false;
-            
         }
         garbage.x = Math.random() * WIDTH;
         garbage.y = -2 * HEIGHT;
@@ -96,5 +95,5 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
 }
 
 
-export {moveShip, myShipConflictHandling, getShipDirection};
+export {moveShip, myShipConflictHandling};
 export {Ship, createShip};

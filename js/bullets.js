@@ -4,19 +4,18 @@ const BULLET_SPEED = 400;
 
 function Bullet({
     startX,
-    startY    
+    startY,
 }) {
     this.x = startX;
-    this.y = startY
+    this.y = startY;
 }
 
-function createNewShoot(bullets_array, ship)
-{
-    bullets_array.push(new Bullet({
-        startX: ship.x + SHIP_PARAMS.MY_SHIP_SIZE / 2, 
-        startY: ship.y - SHIP_PARAMS.MY_SHIP_SIZE * Math.cos(Math.PI / 3)
+function createNewShoot(bulletsArray, ship) {
+    bulletsArray.push(new Bullet({
+        startX: ship.x + SHIP_PARAMS.MY_SHIP_SIZE / 2,
+        startY: ship.y - SHIP_PARAMS.MY_SHIP_SIZE * Math.cos(Math.PI / 3),
     }));
-    return bullets_array;
+    return bulletsArray;
 }
 
 function moveBullets({bullets, deltaTime, direction}) {
