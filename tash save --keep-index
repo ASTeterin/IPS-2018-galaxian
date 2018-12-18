@@ -1,0 +1,137 @@
+[33mcommit de4690a51f6b62fdb7a278990152d39dcbb88273[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Sat Dec 15 09:09:20 2018 +0300
+
+    итерация 8. добавление gameProcess()
+
+[33mcommit 41a7e324085216b54c7c0293ac5dbd1b32eac6b3[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Dec 14 19:49:48 2018 +0300
+
+    итерация 8. разгрузка кода в main
+
+[33mcommit ecf8d24da9ba9d09fcaf4a884b2508ad4486e569[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Dec 14 00:06:36 2018 +0300
+
+    итерация 8. разгрузка кода в main
+
+[33mcommit 59cbfcb47a4b2596a4ad26dbf44bde0cf8ff9b1e[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Dec 7 00:03:22 2018 +0300
+
+    итерация 7. Доработан дизайн страниц игры. в игре добавлены спрайты
+
+[33mcommit 5ac86e5c9f0f660b0fbd21cd2540a961209ab424[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 30 17:55:40 2018 +0300
+
+    итерация 6. коллизия корабдя с мусором и бонусами. Добавление бонусов в модель играка. Вывод информации о параметрах играка на экран
+
+[33mcommit 0198eee42e64724ffdc285c5c67934699b7264c0[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 30 01:09:35 2018 +0300
+
+    итерация 6. движение мусора по синусоиде, обработка коллизии мусора с пулей
+
+[33mcommit 06ad74723c94357f635c808b5004d9544227cfcc[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Thu Nov 29 15:42:00 2018 +0300
+
+    итерация 6. Добавлен космический мусор, реализовано его движение. Пока прямолинейно.
+
+[33mcommit de7a75e0be791aac0e6f64e5b618c13488a05423[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Thu Nov 22 21:46:48 2018 +0300
+
+    итерация 5. универсальная функция обработки коллизии, коллизия продвинутого корабля с ракетами
+
+[33mcommit 5849005a73a4ed9cf680c64289f5930870eba9a2[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Wed Nov 21 20:19:01 2018 +0300
+
+    итерация 5. Часть frontEnd + twig
+
+[33mcommit e3b7e3582df49390d770110522d0556e9c1935a5[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Sun Nov 18 22:18:44 2018 +0300
+
+    итерация 5. исправлена ошибка с ADV_ENEMY_POS
+
+[33mcommit a99aeab39b06dfdec34360fd01d9d1c05855a88b[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Sun Nov 18 21:11:03 2018 +0300
+
+    итерация 4. файл разделен на модули
+
+[33mcommit a3a3825fb12c0a64633007bdaef281b4de2e10cd[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 16 19:33:19 2018 +0300
+
+    итерация 4. главная страница, страница регистрации
+
+[33mcommit cd551d9e4a481680aa6071c39d2b7df33ec3e044[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 9 19:09:19 2018 +0300
+
+    итерация 3. Advansed enemy
+
+[33mcommit 3913046adb3df266a70a09646aac70825d6a0305[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 9 01:22:36 2018 +0300
+
+    итерация 3. Advansed enemy move to both side
+
+[33mcommit ca5ca25020afb2a0c578d97039ef0274567133ba[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 9 00:35:31 2018 +0300
+
+    итерация 3. Advansed enemy
+
+[33mcommit 54577ee7f2243f68869fc5d52d01c9be121510fd[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 2 14:17:35 2018 +0300
+
+    итерация 2 допзадача: стрельба игрока ракетами
+
+[33mcommit 60f0bcd9f43316499cb5ec5defc759ecaf0bb9b2[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 2 11:22:12 2018 +0300
+
+    итерация 2 допзадача: гибель игрока
+
+[33mcommit b8bed340543f87d1b6dec7a9ad7a59b546d9d24d[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Nov 2 00:21:06 2018 +0300
+
+    итерация 2 доработана обработка коллизии
+
+[33mcommit abbfc11b231a31d325b9c2820c4956bef8f12658[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Thu Nov 1 23:52:09 2018 +0300
+
+    итерация 2 moveBullets
+
+[33mcommit 6709e28f144276f2c803c30d8e0c2080da8d17ed[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Thu Nov 1 23:27:05 2018 +0300
+
+    итерация 2
+
+[33mcommit 5e79c8fe2a331f5b4cdadd83aeb7db23a7ac0541[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Oct 26 00:44:27 2018 +0300
+
+    итерация 1 завершена
+
+[33mcommit 17bb6ebabbc0545c80c9e516da2f8789025bbd64[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Thu Oct 25 23:39:06 2018 +0300
+
+    реализовано движение и стрельба
+
+[33mcommit acb95687b4795258ef299f32b1c3268f2f304364[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Alex Teterin <at28813905@gmail.com>
+Date:   Fri Oct 5 17:15:06 2018 +0300
+
+    readme.md
