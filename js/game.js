@@ -12,6 +12,10 @@ import {updateGarbage} from './garbage.js';
 
 const MY_BULLET_DIRECTION = -1;
 const ENEMY_BULLET_DIRECTION = 1;
+const START_GAME = 1;
+const STOP = 2;
+const WIN = 1;
+const LOOSE = 2;
 
 
 function KeyPressedFlag({
@@ -19,13 +23,13 @@ function KeyPressedFlag({
     right,
     shoot,
     rocketShoot,
-    exit,
+    stop,
 }) {
     this.left = left;
     this.right = right;
     this.shoot = shoot;
     this.rocketShoot = rocketShoot;
-    this.exit = exit;
+    this.stop = stop;
 }
 
 function update({gameObjects, deltaTime}) {
@@ -41,18 +45,17 @@ function update({gameObjects, deltaTime}) {
 }
 
 
-function modalWindowProcessing(keyPressedFlag) {
-    //const exitButton = document.getElementById('exitGameBnt');
+function modalWindowProcessing(keyPressedFlag, gameState) {
     const stayInGameButton = document.getElementById('stayInGameBnt');
     const beginPlayButton = document.getElementById('begin_play_bnt');
     stayInGameButton.addEventListener('click', function() {
         document.getElementById('exitModal').style.display = 'none';
-        keyPressedFlag.exit = false;
+        keyPressedFlag.stop = false;
     });
 
     beginPlayButton.addEventListener('click', function() {
         document.getElementById('about_game_modal').style.display = 'none';
-        keyPressedFlag.exit = false;
+        keyPressedFlag.stop = false;
     });
 }
 
@@ -76,8 +79,43 @@ function processEvents(keyPressedFlag, gameObjects) {
     }
     if ((keyPressedFlag.rocketShoot) && (gameObjects.ship.canShoot)) {
         createNewShoot(gameObjects.rockets, gameObjects.ship);
+        gameObjects.ship.countRockets--;
         gameObjects.ship.canShoot = false;
     }
+}
+
+function isLoose(gameObjects) {
+    let isEndGame = false;
+
+    if (gameObjects.ship.lifes <= 0) {
+        isEndGame = true;
+    }
+    return isEndGame;
+}
+
+function isWin(gameObjects) {
+    let isEndGame = false;
+    if (gameObjects.advEnemy.lifes <= 0) {
+        isEndGame = true;
+    }
+    return isEndGame;
+}
+
+function checkGameState(gameObjects, gameState) {
+    if (isLoose(gameObjects)) {
+        gameState = STOP;
+        showInfo(LOOSE);
+    }
+    if (isWin(gameObjects)) {
+        gameState = STOP;
+        showInfo(WIN);
+    }
+    return gameState;
+}
+
+function showInfo(gameResult) {
+    const infoWindow = (gameResult == WIN)? document.getElementById('winModal'): document.getElementById('looseModal');
+    infoWindow.style.display = 'block';
 }
 
 
@@ -90,6 +128,7 @@ function main() {
     const advEnemyPosition = 0;
     const advEnemyDirection = 0;
     let gameObjects = null;
+    let gameState = START_GAME;
 
 
     getAdvancedEnemyParam({advEnemyPosition, advEnemyDirection});
@@ -99,43 +138,37 @@ function main() {
         right: false,
         shoot: false,
         rocketShoot: false,
-        exit: true,
+        stop: true,
     });
     createStars(gameObjects.stars);
     keyPressHendler(keyPressedFlag, gameObjects);
-
-
-    modalWindowProcessing(keyPressedFlag);
+    modalWindowProcessing(keyPressedFlag, gameState);
 
     let lastTimestamp = Date.now(); //текущее время в ms
-    const animateFn = () => {
-        const currentTimeStamp = Date.now();
-        const deltaTime = (currentTimeStamp - lastTimestamp) * 0.001; //сколько секунд прошло с прошлого кадра
+    if ((keyPressedFlag.stop) || (gameState == STOP)) {
+        const animateFn = () => {
+            const currentTimeStamp = Date.now();
+            const deltaTime = (currentTimeStamp - lastTimestamp) * 0.001; //сколько секунд прошло с прошлого кадра
 
-        if (gameObjects.enemys.length == 0) {
-            createEnemys(gameObjects.enemys);
-        }
-        createNewAdvEnemy(gameObjects.advEnemy);
-
-        lastTimestamp = currentTimeStamp;
-
-        if (!keyPressedFlag.exit) {
-            processEvents(keyPressedFlag, gameObjects);
-            update({gameObjects, deltaTime});
-            redraw({ctx, gameObjects, width, height});
-        }
-        if (gameObjects.ship.health == 0) {
-            if (gameObjects.ship.lifes == 0) {
-                alert('GAME OVER');
-                return 0;
-            } else {
-                gameObjects.ship.lifes--;
-                gameObjects.ship.health = SHIP_PARAMS.BEGIN_HEALTH_STATE;
+            if (gameObjects.enemys.length == 0) {
+                createEnemys(gameObjects.enemys);
             }
-        }
-        requestAnimationFrame(animateFn);
-    };
-    animateFn();
+            createNewAdvEnemy(gameObjects.advEnemy);
+            lastTimestamp = currentTimeStamp;
+            if (!keyPressedFlag.stop) {
+                processEvents(keyPressedFlag, gameObjects);
+                update({gameObjects, deltaTime});
+                redraw({ctx, gameObjects, width, height});
+            }
+
+            gameState = checkGameState(gameObjects, gameState);
+            
+            if (gameState != STOP) {
+                requestAnimationFrame(animateFn);
+            }
+        };
+        animateFn();
+    }
 }
 
 main();

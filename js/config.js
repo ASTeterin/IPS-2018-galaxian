@@ -8,7 +8,7 @@ const SHIP_PARAMS = {
     'SHIP_MOVEMENT_LINE': 30,
     'BEGIN_HEALTH_STATE': 10,
     'BEGIN_COUNT_ROCKETS': 5,
-    'COUNT_MY_LIFES': 3,
+    'COUNT_MY_LIFES': 1,
     'MY_SHIP_SIZE': 30,
 };
 

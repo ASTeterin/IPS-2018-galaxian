@@ -8,7 +8,7 @@ const ADV_ENEMY_START_POS = 100;
 const ENEMY_HORIZONTAL_SPEED = 100;
 const ENEMY_SIDE = 25;
 const ADV_ENEMY_HEALTH = 5;
-const ADV_ENEMY_LIFES = 3;
+const ADV_ENEMY_LIFES = 1;
 
 function Enemy({
     startX,
@@ -110,9 +110,7 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
 
     advEnemy.x += ENEMY_HORIZONTAL_SPEED * deltaTime * speedCoef * advEnemy.direction;
     if (((ship.x > advEnemy.x) && (advEnemy.direction == RIGHT)) || ((ship.x < advEnemy.x) && (advEnemy.direction == LEFT))) {
-        //advEnemy.y = 1.5 * advEnemy.x  * advEnemy.d + 1.5 * Math.pow(WIDTH, - advEnemy.d);
         (advEnemy.direction == 1) ? coef = 0: coef = 1;
-        //advEnemy.y = WIDTH * coef - Math.sqrt(advEnemy.x * 500) *(-advEnemy.d);
         advEnemy.y = WIDTH * coef - advEnemy.x * (-advEnemy.direction);
     }
 
@@ -136,7 +134,7 @@ function conflictHandling({object1, objectSize1, object2, objectSize2}) {
 }
 */
 
-function advEnemyConflictHandling({advEnemy, bullets, rockets}) {
+function advEnemyConflictHandling({advEnemy, bullets, rockets, ship}) {
     for (let i = 0; i < bullets.length; i++) {
         if (conflictHandling({object1: bullets[i], objectSize1: BULLET_SIZE, object2: advEnemy, objectSize2: ENEMY_SIDE})) {
             bullets.splice(i, 1);
@@ -144,13 +142,18 @@ function advEnemyConflictHandling({advEnemy, bullets, rockets}) {
         }
     }
     for (let i = 0; i < rockets.length; i++) {
-        if (conflictHandling({object1: rockets[i], objectSize1: BULLET_SIZE, object2: advEnemy, objectSize2: ENEMY_SIDE})) {
+        if (conflictHandling({
+            object1: rockets[i],
+            objectSize1: BULLET_SIZE,
+            object2: advEnemy,
+            objectSize2: ENEMY_SIDE}
+        )) {
             rockets.splice(i, 1);
-            advEnemy.health -= 5;
+            advEnemy.health -= ADV_ENEMY_HEALTH;
         }
     }
     if (advEnemy.health <= 0) {
-        advEnemy = null;
+        ship.scores += 50;
     }
 }
 
@@ -176,7 +179,7 @@ function enemyConflictHandling({enemys, bullets, rockets, ship}) {
                     object2Height: ENEMY_SIDE,
                 })) {
                     enemys.splice(i, 1);
-                    ship.scores += 50;
+                    ship.scores += 10;
 
                     isHit = true;
                 } else {
@@ -217,7 +220,7 @@ function updateAdvancedEnemys({advEnemy, deltaTime, ship, bullets, enemyBullets,
     if ((advEnemy) && (advEnemy.health > 0)) {
         moveAdvEnemy({advEnemy, deltaTime, ship});
         shootingAdvEnemy({advEnemy, deltaTime, enemyBullets});
-        advEnemyConflictHandling({advEnemy, bullets, rockets});
+        advEnemyConflictHandling({advEnemy, bullets, rockets, ship});
     }
 }
 
@@ -231,7 +234,7 @@ function updateEnemys({enemys, deltaTime, bullets, rockets, enemyBullets, ship})
 
 function createNewAdvEnemy(advEnemy) {
     if ((advEnemy) && (advEnemy.health <= 0) && advEnemy.lifes > 0) {
-        advEnemy.health = 5;
+        advEnemy.health = ADV_ENEMY_HEALTH;
         advEnemy.x = - WIDTH * 10;
         advEnemy.direction = 1,
         advEnemy.lifes--;

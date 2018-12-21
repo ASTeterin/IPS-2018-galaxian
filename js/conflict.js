@@ -24,9 +24,8 @@ function rectangleConflictHandling({object1, object1Width, object1Height, object
     const isObject1LeftHandling = (object1.x + object1Width > object2.x);
     const isObject1RightHandling = (object1.x - object1Width < object2.x + object2Width);
     const isObject1DownHandling = (object1.y < object2.y + object2Height);
-    const isObject1UpHandling = true; //(object1.y > object2.y);//!!!!!!!!!
 
-    if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling) && (isObject1UpHandling)) {
+    if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling)) {
         return true;
     } else {
         return false;

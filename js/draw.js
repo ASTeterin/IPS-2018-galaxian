@@ -10,32 +10,14 @@ const lifeInfo = document.getElementById('lifes');
 const healthInfo = document.getElementById('health');
 const rocketsInfo = document.getElementById('rockets');
 
-//const BULLET_SIZE = 3;
-
 
 function drawShip(ctx, ship, side) {
-    //var img = document.getElementById ('ship');
     const img = new Image();
     img.src = 'web/img/hero.png';
-    //img.src="http://www.minkbooks.com/content/snow.jpg";
-
-    /*ctx.fillStyle = "red";
-    ctx.beginPath();
-    ctx.moveTo(ship.x, ship.y);
-    ctx.lineTo(ship.x + side,  ship.y);
-    ctx.lineTo(ship.x + side / 2, ship.y - side * Math.cos(Math.PI / 3));
-    ctx.fill();*/
-    //ctx.drawImage('../web/img/galaxian.jpg', ship.x, ship.y);
     ctx.drawImage(img, ship.x, ship.y - side);
 }
 
 function drawEnemy(ctx, enemy) {
-    /*ctx.fillStyle = "green";
-    ctx.beginPath();
-    ctx.moveTo(enemy.x, enemy.y);
-    ctx.lineTo(enemy.x + ENEMY_SIDE,  enemy.y);
-    ctx.lineTo(enemy.x + ENEMY_SIDE / 2, enemy.y + ENEMY_SIDE * Math.cos(Math.PI / 3));
-    ctx.fill();*/
     const img = new Image();
     img.src = 'web/img/enemy1_1.png';
     ctx.drawImage(img, enemy.x, enemy.y);

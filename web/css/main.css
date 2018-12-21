@@ -13,12 +13,6 @@ html
 
 }
 
-.stars
-{
-    /*background-image: url("../img/stars3.jpg"); 
-    border: 1px solid #0275d8;  */
-}
-
 /*
 .sidebar
 {
@@ -85,7 +79,7 @@ html
     border: 1px solid #0275d8;
     text-align: center;
     display: block;
-    /*margin: 0 auto;*/
+    margin: 0 auto;
 }
 
 .game_field
@@ -146,12 +140,20 @@ html
 
 .battle_arena 
 {
-    /*margin: 0;
-    padding: 0;*/
+    margin: 0;
+    padding: 0;
 }
 
 .game_info
 {
+    font-size: 28px;
+    line-height: 44px;
+    text-align: center;
+}
+
+.game_info_field_name
+{
     font-size: 18px;
-    margin-top: 50px;
+    color: #0275d8;
+    
 }

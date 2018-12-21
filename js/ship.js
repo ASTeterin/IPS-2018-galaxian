@@ -47,16 +47,6 @@ function createShip(width, health) {
     });
 }
 
-/*function getShipDirection(current_direction)
-{
-    if ((current_direction.left) && (!current_direction.right)) {
-        return LEFT;
-    }
-    if ((current_direction.right) && (!current_direction.left)) {
-        return RIGHT;
-    }
-    return null;
-}*/
 
 function myShipConflictHandling({ship, enemyBullets, garbage}) {
     for (let i = 0; i < enemyBullets.length; i++) {
@@ -90,6 +80,12 @@ function myShipConflictHandling({ship, enemyBullets, garbage}) {
 
     if (ship.isDemaged) {
         ship.health--;
+        if (ship.health <= 0) {
+            ship.lifes--;
+            if (ship.lifes > 0) {
+                ship.health = 10;
+            }
+        }
         ship.isDemaged = false;
     }
 }
