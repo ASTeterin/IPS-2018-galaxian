@@ -6,23 +6,22 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-2">
-            <div>Очки: </div>
-            <div id="scores"></div>
-            <div>Жизни</div>
-            <img src="web/img/hero.png" id="ship"/>
-            <div id="lifes"></div>
-            <div>Здоровье</div>
-            <div id="health"></div>
-            <div>Ракеты</div>
-            <div id="rockets"></div>
-
+        <div class="col">
+            <div class="username"> </div>
+            <span class="game_info">Очки: </span>
+            <span id="scores"></span>
+            <span class="game_info">Жизни: </span>
+            <span id="lifes"></span>
+            <span class="game_info">Здоровье: </span>
+            <span id="health"></span>
+            <span class="game_info">Ракеты: </span>
+            <span id="rockets"></span>
         </div>
 
-        <div class="game_field col">
-            <canvas id="canvas" width="500" height="650"></canvas>
+        <div class="col battle_arena">
+            <canvas id="canvas" width="500" height="640"></canvas>
         </div>
-        <div class="col-sm-2"></div>
+        
     </div>
 
     
@@ -46,36 +45,8 @@
         </div>
     </div>
 
-    <div class="modal fade show modal_window aboutGameModal" id="about_game_modal" tabindex="-1" data-keyboard="false" role="dialog" aria-labelledby="aboutGamelLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content stars">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Описание</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h3>Цель игры</h3>
-                    <p>Необходимо уничтожить все штурмовики противника. За уничтожение обычного вражеского корабля начисляется 10 очков, 
-                        за уничтожение штурмовика - 50.</p>
-                    <h3>Управление</h3>
-                    <p>
-                        <span>
-                            Управление кораблем осуществляется кнопками влево и вправо. Cтрельба - Space? стрельба ракетами
-                            <img src="./web/img/ctrl.jpg">
-                        </span>. Для паузы необходимо нажать Esc/
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="begin_play_bnt" class="btn btn-primary">Начать</button>
-                </div>
-            </div>
-        </div>
-    </div>
-            
-
-    
+    {% include "about_game.html.twig" %}        
+   
 </div>
 <script src="js/game.js" type="module"></script>
 

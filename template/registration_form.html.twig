@@ -1,4 +1,4 @@
-<div class="modal fade modal_window" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade modal_window" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -13,11 +13,12 @@
                     <label class="sr-only" for="inputLogin">Login</label>
                     <input type="text" class="form-control btn_menu" id="username" name="username" placeholder="Login" required="">
                     <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" id="inputPassword"  name="password" class="form-control btn_menu" placeholder="Password" required="">
+                    <input type="password" id="password"  name="password" class="form-control btn_menu" placeholder="Password" required="">
                     <label for="inputPassword" class="sr-only">Password</label>
                     <input type="password" id="reEnterPassword" name="confirmed_password" class="form-control btn_menu" placeholder="Reenter Password" required="">
                 </div>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                <div class="error"></div> 
+                    <button id="registr_user_btn" type="submit" class="btn btn-primary">Зарегистрироваться</button>
             </form>
             </div>
             <div class="modal-footer">

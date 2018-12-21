@@ -76,15 +76,22 @@ html
 {
     color: grey;
     margin: 0 auto;
+    width: 60%;
 }
 
 
 .container canvas
 {
-    border: 3px solid #0275d8;
+    border: 1px solid #0275d8;
     text-align: center;
     display: block;
-    margin: 0 auto;
+    /*margin: 0 auto;*/
+}
+
+.game_field
+{
+    border: 3px solid #0275d8;
+    /*padding: 0;*/
 }
 
 .btn_menu
@@ -124,4 +131,27 @@ html
 .no_visible
 {
     visibility: hidden;
+}
+
+.error_in_field
+{
+    border: red solid 1px;
+}
+
+.username
+{
+    margin-top: 50px;
+    font-size: 18px;
+}
+
+.battle_arena 
+{
+    /*margin: 0;
+    padding: 0;*/
+}
+
+.game_info
+{
+    font-size: 18px;
+    margin-top: 50px;
 }

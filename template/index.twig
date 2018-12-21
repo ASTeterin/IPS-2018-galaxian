@@ -11,46 +11,48 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-sm-3 text-primary">
-            <ul class="nav flex-sm-column">
-                <li><button type="button" class="btn btn-outline-primary btn-block btn_menu" data-toggle="modal" data-target="#exampleModal">
-                    Регистрация</button></li>          
-                <li><a href="game.php" class="btn btn-primary btn-block btn_menu text_color">Быстрая игра</a></li>
-                </ul>
-            <form>
-                <div class="form-row registration_form">
-                    <h3>Вход</h3>
-                    <div class="form-group">
-                        <label class="sr-only" for="inputLogin">Login</label>
-                        <input type="email" class="form-control btn_menu" id="signInInputLogin" placeholder="Login">
-                        <label for="inputPassword" class="sr-only">Password</label>
-                        <input type="password" id="signInInputPassword" class="form-control btn_menu" placeholder="Password" required="">
-                        <button type="button" class="btn btn-primary btn-block btn_menu" onclick = "window.location = 'personal_accaunt.php'">Вход</button>
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-3 text-primary">
+                <ul class="nav flex-sm-column">
+                    <li><button type="button" class="btn btn-outline-primary btn-block btn_menu" data-toggle="modal" data-target="#registrationModal">
+                        Регистрация</button></li>          
+                    <li><a href="game.php" class="btn btn-primary btn-block btn_menu text_color">Быстрая игра</a></li>
+                    </ul>
+                <form>
+                    <div class="form-row registration_form">
+                        <h3>Вход</h3>
+                        <div class="form-group">
+                            <label class="sr-only" for="inputLogin">Login</label>
+                            <input type="email" class="form-control btn_menu" id="signInInputLogin" placeholder="Login">
+                            <label for="inputPassword" class="sr-only">Password</label>
+                            <input type="password" id="signInInputPassword" class="form-control btn_menu" placeholder="Password" required="">
+                            <button type="button" class="btn btn-primary btn-block btn_menu" onclick = "window.location = 'personal_accaunt.php'">Вход</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-sm-9">
+                
+                <div class="row about_game">
+                    <div class="col-sm-4">
+                        <img class="img-responsive img_about_game" src="web/img/gala_miniature.jpg" alt="Galaxian">
+                    </div>
+                    <div class="col-sm-8">
+                        <h2>Описание</h2>
+                        <p>
+                            Игра представляла собой фиксированный шутер, в котором игрок управляет космическим кораблём, находящимся внизу экрана.
+                            Волна за волной армии пришельцев атакуют корабль игрока.
+                            В определенный момент у противника появляются мощные корабли-штурмовики. Они сближаются с кораблем игрока, осыпая его 
+                            градом сгустков энергии. В конце игрока ждет бой с большим командным кораблем.  
+                        </p>
+                        
+
                     </div>
                 </div>
-            </form>
-
-        </div>
-        <div class="col-sm-9">
-            
-            <div class="row about_game">
-                <div class="col-sm-4">
-                    <img class="img-responsive img_about_game" src="web/img/gala_miniature.jpg" alt="Galaxian">
-                </div>
-                <div class="col-sm-8">
-                    <h2>Описание</h2>
-                    <p>
-                        Игра представляла собой фиксированный шутер, в котором игрок управляет космическим кораблём, находящимся внизу экрана.
-                        Волна за волной армии пришельцев атакуют корабль игрока.
-                        В определенный момент у противника появляются мощные корабли-штурмовики. Они сближаются с кораблем игрока, осыпая его 
-                        градом сгустков энергии. В конце игрока ждет бой с большим командным кораблем.  
-                    </p>
-                    
-
-                </div>
+                
             </div>
-            
         </div>
     </div>
 
@@ -60,6 +62,8 @@
 
 {% block script %}
     {% include "script.html.twig" %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/registration.js"></script>
 {% endblock %}
 
 
