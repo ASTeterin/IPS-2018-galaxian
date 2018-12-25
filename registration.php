@@ -1,14 +1,11 @@
 <?php
 
-require_once("inc/common.inc.php");
+require_once('inc/common.inc.php');
 
 $name = $_POST['login'] ?? '';
 $password = $_POST['password'] ?? '';
-echo json_encode(['login' => $name]);
 
-
-
-/*$registredUsers = getUserInfoByName($name);
+$registredUsers = getUserInfoByName($name);
 
 if (!empty($registredUsers)) {
     echo json_encode(['error_code' => 7]);
@@ -16,7 +13,9 @@ if (!empty($registredUsers)) {
 }
 
 $userId = registerUser($name, $password);
-echo json_encode(['success' => 1, 'user_id' => $userId]);*/
+//echo json_encode(['success' => 1, 'user_id' => $userId]);
+
+echo json_encode(['success' => 1]);
 
 
 

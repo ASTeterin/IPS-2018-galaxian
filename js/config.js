@@ -3,6 +3,10 @@ const WIDTH = 500;
 const HEIGHT = 1000;
 const LEFT = -1;
 const RIGHT = 1;
+const START_GAME = 1;
+const STOP = 2;
+const WIN = 1;
+const LOOSE = 2;
 const COUNT_ENEMY_IN_LINE = 8;
 const SHIP_PARAMS = {
     'SHIP_MOVEMENT_LINE': 30,
@@ -30,7 +34,7 @@ const KEY_CODES = {
 
 export {WIDTH};
 export {HEIGHT};
-export {LEFT, RIGHT};
+export {LEFT, RIGHT, START_GAME, STOP, WIN, LOOSE};
 export {COUNT_ENEMY_IN_LINE, ENEMY_LINE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE};
 export {SHIP_PARAMS};
 export {BULLET_SIZE};

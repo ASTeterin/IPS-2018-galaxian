@@ -1,22 +1,18 @@
 import {redraw} from './draw.js';
 import {updateAdvancedEnemys, getAdvancedEnemyParam, createEnemys, updateEnemys, createNewAdvEnemy} from './enemy.js';
 import {moveBullets, createNewShoot} from './bullets.js';
-import {SHIP_PARAMS, LEFT, RIGHT} from './config.js';
+import {START_GAME, STOP, LEFT, RIGHT} from './config.js';
 import {moveShip, myShipConflictHandling} from './ship.js';
 import {updateRockets} from './rocket.js';
 import {createStars, updateStars} from './star.js';
 import {keyPressHendler} from './keyPressHendler.js';
 import {GameObjects} from './gameObjects.js';
 import {updateGarbage} from './garbage.js';
+import {checkGameState} from './game_state.js';
 
 
 const MY_BULLET_DIRECTION = -1;
 const ENEMY_BULLET_DIRECTION = 1;
-const START_GAME = 1;
-const STOP = 2;
-const WIN = 1;
-const LOOSE = 2;
-
 
 function KeyPressedFlag({
     left,
@@ -84,40 +80,6 @@ function processEvents(keyPressedFlag, gameObjects) {
     }
 }
 
-function isLoose(gameObjects) {
-    let isEndGame = false;
-
-    if (gameObjects.ship.lifes <= 0) {
-        isEndGame = true;
-    }
-    return isEndGame;
-}
-
-function isWin(gameObjects) {
-    let isEndGame = false;
-    if (gameObjects.advEnemy.lifes <= 0) {
-        isEndGame = true;
-    }
-    return isEndGame;
-}
-
-function checkGameState(gameObjects, gameState) {
-    if (isLoose(gameObjects)) {
-        gameState = STOP;
-        showInfo(LOOSE);
-    }
-    if (isWin(gameObjects)) {
-        gameState = STOP;
-        showInfo(WIN);
-    }
-    return gameState;
-}
-
-function showInfo(gameResult) {
-    const infoWindow = (gameResult == WIN)? document.getElementById('winModal'): document.getElementById('looseModal');
-    infoWindow.style.display = 'block';
-}
-
 
 function main() {
     const canvasEl = document.getElementById('canvas');
@@ -162,7 +124,6 @@ function main() {
             }
 
             gameState = checkGameState(gameObjects, gameState);
-            
             if (gameState != STOP) {
                 requestAnimationFrame(animateFn);
             }

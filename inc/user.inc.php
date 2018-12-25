@@ -12,3 +12,19 @@ function registerUser($name, $pass)
     dbQuery($insertNewUserQueryString);
     return dbGetLastInsertId();
 } 
+
+function getPasswordByName($name)
+{
+    $getPasswordQueryString = "SELECT user_password FROM " . USER_TABLE .  " WHERE user_name = '" . dbQuote($name)  . "'";
+    return dbQueryGetResult($getPasswordQueryString);
+}
+
+function checkPassword($name, $password)
+{
+    $validPassword = getPasswordByName($name)[0]["user_password"];
+    if ($password == $validPassword) {
+        return true;    
+    } else {
+        return false;
+    }
+}
