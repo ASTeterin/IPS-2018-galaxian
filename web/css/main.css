@@ -155,5 +155,10 @@ html
 {
     font-size: 18px;
     color: #0275d8;
-    
+}
+
+.error_registration
+{
+    height: 40px;
+    color: red;
 }

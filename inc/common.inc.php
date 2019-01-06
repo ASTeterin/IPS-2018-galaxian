@@ -8,5 +8,6 @@
     require_once('template.inc.php');
     require_once('user.inc.php');
     require_once('top_result.inc.php');
+    require_once('error.inc.php');
 
     dbInitialConnect();

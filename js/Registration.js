@@ -2,8 +2,19 @@ $(window).on('load', onWindowLoaded);
 
 function onWindowLoaded() {
     registerButtonClicked();
+    loginFieldClicked();
     removeErrorState('#password', 'error_in_field');
     removeErrorState('#reEnterPassword', 'error_in_field');
+}
+
+function clearErrorInfoField($fieldName) {
+    $($fieldName).text('');
+}
+
+function loginFieldClicked() {
+    $('#username').click(function() {
+        clearErrorInfoField('#error_registration');
+    });
 }
 
 function registerButtonClicked() {
@@ -13,17 +24,22 @@ function registerButtonClicked() {
         $confirmedPassword = $('#reEnterPassword').val();
         if (($login != '') && ($password != '') && ($confirmedPassword != '')) {
             event.preventDefault();
+            if ($password != $confirmedPassword) {
+                $('#password').addClass('error_in_field');
+                $('#reEnterPassword').addClass('error_in_field');
+            } else {
+                const $data = {'login': $login, 'password': $password};
+                $.ajax({
+                    url: 'registration.php',
+                    type: 'POST',
+                    data: $data,
+                    dataType: 'json',
+                    complete: onComplete,
+                });
+            }
         }
         $('#password').removeClass('error_in_field');
         $('#reEnterPassword').removeClass('error_in_field');
-        if ($password != $confirmedPassword) {
-            $('#password').addClass('error_in_field');
-            $('#reEnterPassword').addClass('error_in_field');
-        } else {
-            const data = {'login': $login, 'password': $password};
-            $.post('registration.php', data, onComplete, 'json');
-            //$('#registrationModal').modal('hide');
-        }
     });
 }
 
@@ -33,6 +49,28 @@ function removeErrorState($selector, $class) {
     });
 }
 
-function onComplete(response) {
-    console.log(response);
+function parseResponse($response) {
+    $response = $response.replace(/"/g, '');
+    $params = $response.split(':');
+    $status = $params[0].replace('{', '');
+    if ($status.indexOf('success') != -1) {
+        $name = $params[1].slice(0, -1);
+        return {status: 1, name: $name};
+    } else {
+        return {status: 0};
+    }
 }
+
+function onComplete($response) {
+    $responseObj = parseResponse($response.responseText);
+
+    if ($responseObj.status === 1) {
+        $('.modal').modal('hide');
+        $('#successRegModal').modal('show');
+        $('#user_name').text($responseObj.name);
+        $('#login').val($responseObj.name);
+    } else {
+        $('#error_registration').text('User alrady exist');
+    }
+}
+

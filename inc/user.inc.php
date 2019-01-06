@@ -8,7 +8,8 @@ function getUserInfoByName($name)
 
 function registerUser($name, $pass)
 {
-    $insertNewUserQueryString = "INSERT INTO " . USER_TABLE . " (user_name, user_password) VALUES ('" . dbQuote($name) . "', '" . dbQuote($pass) . "')";
+    $insertNewUserQueryString = "INSERT INTO " . USER_TABLE . " (user_name, user_password, registration_date) 
+    VALUES ('" . dbQuote($name) . "', '" . dbQuote($pass) . "', '" . date("Y-m-d") . "')";
     dbQuery($insertNewUserQueryString);
     return dbGetLastInsertId();
 } 
@@ -21,9 +22,10 @@ function getPasswordByName($name)
 
 function checkPassword($name, $password)
 {
-    $validPassword = getPasswordByName($name)[0]["user_password"];
-    if ($password == $validPassword) {
-        return true;    
+    $validPasswordHash = getPasswordByName($name)[0]["user_password"];
+    $passwordHash = sha1($password);
+    if ($passwordHash == $validPasswordHash) {
+        return true;
     } else {
         return false;
     }
