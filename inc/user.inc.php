@@ -6,6 +6,12 @@ function getUserInfoByName($name)
     return dbQueryGetResult($findUserQueryString);
 }
 
+function getUserIdByName($name)
+{
+    $getUserIdQueryString = "SELECT user_id FROM " . USER_TABLE .  " WHERE user_name = '" . dbQuote($name)  . "'";
+    return dbQueryGetResult($getUserIdQueryString);
+}
+
 function registerUser($name, $pass)
 {
     $insertNewUserQueryString = "INSERT INTO " . USER_TABLE . " (user_name, user_password, registration_date) 
