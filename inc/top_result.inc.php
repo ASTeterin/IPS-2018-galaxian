@@ -6,7 +6,7 @@ function getDataFromStorage()
     $getTopResultQuery = "SELECT users.user_name, result.scores
     FROM " . USER_TABLE . 
     " INNER JOIN " . RESULT_TABLE. " USING (user_id)
-    ORDER BY result.scores DESC";
+    ORDER BY result.scores DESC LIMIT 10";
     $result = dbQueryGetResult($getTopResultQuery);
     return $result; 
 }

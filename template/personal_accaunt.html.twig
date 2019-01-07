@@ -14,11 +14,16 @@
                     Новая игра</button></li>
                 <li><button type="button" class="btn btn-outline-primary btn-block btn_menu" onclick="window.location = 'records.php'">
                     Таблица рекордов</button></li>
-                <li><button type="button" class="btn btn-outline-primary btn-block btn_menu" onclick="window.location = 'index.php'">
+                <li><button type="button" id="exit_btn" class="btn btn-outline-primary btn-block btn_menu">
                     Выход</button></li>
             </ul>
         </div>
         <div class="col-sm"></div>
     </div>
 
+{% endblock %}
+
+{% block script %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/exit.js"></script>
 {% endblock %}

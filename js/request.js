@@ -1,14 +1,12 @@
-function getXmlHttp()
-{
-    var xmlhttp = new XMLHttpRequest();
+function getXmlHttp() {
+    const xmlhttp = new XMLHttpRequest();
     return xmlhttp;
 }
 
-function postRequest(url, data)
-{
-    var xmlhttp = getXmlHttp();
-    xmlhttp.open("POST", url, true);
-    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+function postRequest(url, data) {
+    const xmlhttp = getXmlHttp();
+    xmlhttp.open('POST', url, true);
+    xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4) {
             if (xmlhttp.status == 200) {
@@ -20,15 +18,14 @@ function postRequest(url, data)
     xmlhttp.send(serializeObject(data));
 }
 
-function serializeObject(obj)
-{
-    var str = [];
-    for (var p in obj) {
+function serializeObject(obj) {
+    const str = [];
+    for (const p in obj) {
         if (obj.hasOwnProperty(p)) {
-            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
         }
     }
-    return str.join("&");
+    return str.join('&');
 }
 
 export {postRequest};
