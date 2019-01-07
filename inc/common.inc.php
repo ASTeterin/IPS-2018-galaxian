@@ -9,5 +9,8 @@
     require_once('user.inc.php');
     require_once('top_result.inc.php');
     require_once('error.inc.php');
+    require_once('session.inc.php');
 
     dbInitialConnect();
+    startSession();
+    

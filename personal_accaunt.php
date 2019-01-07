@@ -1,7 +1,13 @@
 <?php
 require_once("inc/common.inc.php");
 
+$username = getFromSession('username');
+
 $buttons = array(
         'Играть', 'Таблица рекордов', 'Выход');
 
-echo getView('personal_accaunt.html.twig', $buttons);
+$params = array('buttons' => $buttons, 'username' => $username);
+
+
+
+echo getView('personal_accaunt.html.twig', $params);

@@ -61,13 +61,20 @@ function parseResponse($response) {
     }
 }
 
+function showUserInfo($name) {
+    $('#info_modal').modal('show');
+    $('#info_title').text('Регистрация');
+    $('#user_name').text('Пользователь ' + $name + ' успешно зарегистрирован');
+}
+
 function onComplete($response) {
     $responseObj = parseResponse($response.responseText);
 
     if ($responseObj.status === 1) {
         $('.modal').modal('hide');
-        $('#successRegModal').modal('show');
-        $('#user_name').text($responseObj.name);
+        showUserInfo($responseObj.name);
+        //$('#info_modal').modal('show');
+        //$('#user_name').text($responseObj.name);
         $('#login').val($responseObj.name);
     } else {
         $('#error_registration').text('User alrady exist');

@@ -28,7 +28,7 @@
                             <label for="currentPassword" class="sr-only">Password</label>
                             <input type="password" id="currentPassword"  name="currentPassword" class="form-control btn_menu" placeholder="Password" required="">
                             
-                            <button id="login_btn" type="submit" class="btn btn-primary btn-block btn_menu">Вход</button>
+                            <button id="login_btn" type="button" class="btn btn-primary btn-block btn_menu">Вход</button>
                         </div>
                     </div>
                 </form>
@@ -63,6 +63,8 @@
 {% block script %}
    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+    <script src="js/login.js"></script>
     <script src="js/registration.js"></script>
      {% include "script.html.twig" %}
 {% endblock %}
