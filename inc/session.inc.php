@@ -12,3 +12,5 @@ function getFromSession($key)
 {
     return $_SESSION[$key] ?? '';
 }
+
+

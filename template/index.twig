@@ -17,7 +17,7 @@
                 <ul class="nav flex-sm-column">
                     <li><button type="button" class="btn btn-outline-primary btn-block btn_menu" data-toggle="modal" data-target="#registrationModal">
                         Регистрация</button></li>          
-                    <li><a href="game.php" class="btn btn-primary btn-block btn_menu text_color">Быстрая игра</a></li>
+                    <li><a href="game.php" id="fast_game" class="btn btn-primary btn-block btn_menu text_color">Быстрая игра</a></li>
                     </ul>
                 <form  action="./inc/login.inc.php" method="POST">
                     <div class="form-row registration_form">
@@ -65,6 +65,7 @@
     
     <script src="js/login.js"></script>
     <script src="js/registration.js"></script>
+    <script src="js/fast_game.js"></script>
      {% include "script.html.twig" %}
 {% endblock %}
 

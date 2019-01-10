@@ -8,11 +8,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Покинуть игру?</p>
+                <p>Покинуть игру {{username}}?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="exitGameBnt" class="btn btn-primary" onclick = "window.location = 'personal_accaunt.php'">Да</button>
-                <button type="button" id="stayInGameBnt" class="btn btn-outline-primary">Нет</button>
+                <button type="button" id="exit_game_btn" class="btn btn-primary" onclick = "window.location = 
+                {% if username == '' %}
+                    'index.php'">Да</button>
+                {% else %}
+                    'personal_accaunt.php'">Да</button>
+                {% endif %}
+                <button type="button" id="stay_in_game_bnt" class="btn btn-outline-primary">Нет</button>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@ $isChangeed = false;
 //echo ($name);
 //echo ($password);
 
-$currentName = getFromSession(username);
+$currentName = getFromSession('username');
 //echo $name;
 
 if (($currentName == $name) && ($password == '')) {

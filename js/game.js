@@ -1,5 +1,5 @@
 import {redraw} from './draw.js';
-import {updateAdvancedEnemys, getAdvancedEnemyParam, createEnemys, updateEnemys, createNewAdvEnemy} from './enemy.js';
+import {updateAdvancedEnemys, setAdvancedEnemyParam, createEnemys, updateEnemys, createNewAdvEnemy} from './enemy.js';
 import {moveBullets, createNewShoot} from './bullets.js';
 import {START_GAME, STOP, LEFT, RIGHT} from './config.js';
 import {moveShip, myShipConflictHandling} from './ship.js';
@@ -42,7 +42,7 @@ function update({gameObjects, deltaTime}) {
 
 
 function modalWindowProcessing(keyPressedFlag, gameState) {
-    const stayInGameButton = document.getElementById('stayInGameBnt');
+    const stayInGameButton = document.getElementById('stay_in_game_bnt');
     const beginPlayButton = document.getElementById('begin_play_bnt');
     stayInGameButton.addEventListener('click', function() {
         document.getElementById('exitModal').style.display = 'none';
@@ -93,7 +93,7 @@ function main() {
     let gameState = START_GAME;
 
 
-    getAdvancedEnemyParam({advEnemyPosition, advEnemyDirection});
+    setAdvancedEnemyParam({advEnemyPosition, advEnemyDirection});
     gameObjects = new GameObjects(width, height, advEnemyPosition);
     const keyPressedFlag = new KeyPressedFlag({
         left: false,

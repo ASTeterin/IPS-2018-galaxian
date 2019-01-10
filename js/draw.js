@@ -40,11 +40,6 @@ function drawStar(ctx, star) {
 }
 
 function drawGarbage(ctx, garbage) {
-    /*ctx.fillStyle = "green";
-    ctx.beginPath();
-    ctx.arc(garbage.x, garbage.y, garbage.size, 0, Math.PI * 2);
-    ctx.fill();  */
-
     const img = new Image();
     if (!garbage.isBonus) {
         img.src = 'web/img/garbage.jpg';

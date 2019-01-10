@@ -22,6 +22,11 @@ CREATE TABLE friends
     friend_id BIGINT 
 ) ENGINE INNODB DEFAULT CHARSET = UTF8;
 
+INSERT INTO friends
+(user_id, friend_id)
+VALUES
+();
+
 $qwery = "show databases";
 
 $result = dbQuery($qweryString);

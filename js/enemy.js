@@ -74,7 +74,7 @@ function createAdvEnemy(advEnemyPosition) {
 }
 
 // переименовать функцию
-function getAdvancedEnemyParam({advEnemyPosition, advEnemyDirection}) {
+function setAdvancedEnemyParam({advEnemyPosition, advEnemyDirection}) {
     if (Math.random() < 0.5) {
         advEnemyPosition = -ADV_ENEMY_START_POS;
         advEnemyDirection = 1;
@@ -243,6 +243,6 @@ export {AdvancedEnemy, updateAdvancedEnemys, createAdvEnemy};
 export {createEnemys, updateEnemys};
 export {shootingEnemys};
 export {shootingAdvEnemy};
-export {getAdvancedEnemyParam};
+export {setAdvancedEnemyParam};
 export {advEnemyConflictHandling};
 export {enemyConflictHandling, createNewAdvEnemy};

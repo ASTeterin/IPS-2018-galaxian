@@ -67,7 +67,6 @@ function updateUserInfo($currentUsername) {
     if ($('#change_pass').is(':checked')) {
         checkPassword($password, $confirmedPassword);
     }
-    
     $data = {'username': $username, 'password': $password};
     $.ajax({
         url: 'inc/edit_profile.inc.php',
