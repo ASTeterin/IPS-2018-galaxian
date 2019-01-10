@@ -1,6 +1,7 @@
 <?php
 
 require_once('inc/common.inc.php');
+header('Content-Type: text/json');
 
 
 $name = $_POST['login'] ?? '';
@@ -15,8 +16,8 @@ if (!empty($registredUsers)) {
 }
 $hash_password = sha1($password);
 $userId = registerUser($name, $hash_password);
-header('Content-Type: text/json');
-echo json_encode(['success' => $name]);
+
+echo json_encode(['success' => $name], JSON_UNESCAPED_UNICODE);
 
 //echo json_encode(['success' => 1]);
 

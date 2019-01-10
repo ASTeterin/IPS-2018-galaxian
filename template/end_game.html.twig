@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content stars">
             <div class="modal-body">
-                <p>Поздравляем, вы выиграли!</p>
+                <p>{{ username }} поздравляем, вы выиграли!</p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="exitGameBnt" class="btn btn-primary" onclick = "window.location = 'game.php'">Играть заново</button>
@@ -16,7 +16,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content stars">
             <div class="modal-body">
-                <p>Вы проиграли!</p>
+                <p>{{ username }}, вы проиграли!</p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="exitGameBnt" class="btn btn-primary" onclick = "window.location = 'game.php'">Играть заново</button>

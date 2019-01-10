@@ -9,7 +9,10 @@
         <div class="col-sm-2">
             <div class="container">
                 <div class="row">
-                    <div class="col username"> </div>
+                    <span class="game_info_field_name col-sm-9 username">Игрок: </span>
+                </div>
+                <div class="row">
+                    <div class="col game_info">{{ username }}</div>
                 </div>
                 <div class="row">
                     <span class="game_info_field_name col-sm-9">Очки: </span>
@@ -42,8 +45,7 @@
             <canvas id="canvas" width="500" height="640"></canvas>
         </div> 
     </div>
-
-    
+ 
     {% include "stop_game.html.twig" %} 
     {% include "about_game.html.twig" %}
     {% include "end_game.html.twig" %}         

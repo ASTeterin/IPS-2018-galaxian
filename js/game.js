@@ -107,29 +107,31 @@ function main() {
     modalWindowProcessing(keyPressedFlag, gameState);
 
     let lastTimestamp = Date.now(); //текущее время в ms
-    if ((keyPressedFlag.stop) || (gameState == STOP)) {
-        const animateFn = () => {
-            const currentTimeStamp = Date.now();
-            const deltaTime = (currentTimeStamp - lastTimestamp) * 0.001; //сколько секунд прошло с прошлого кадра
-
-            if (gameObjects.enemys.length == 0) {
-                createEnemys(gameObjects.enemys);
-            }
-            createNewAdvEnemy(gameObjects.advEnemy);
-            lastTimestamp = currentTimeStamp;
-            if (!keyPressedFlag.stop) {
-                processEvents(keyPressedFlag, gameObjects);
-                update({gameObjects, deltaTime});
-                redraw({ctx, gameObjects, width, height});
-            }
-
-            gameState = checkGameState(gameObjects, gameState);
-            if (gameState != STOP) {
-                requestAnimationFrame(animateFn);
-            }
-        };
-        animateFn();
+    if (!((keyPressedFlag.stop) || (gameState == STOP))) {
+        return;
     }
+    
+    const animateFn = () => {
+        const currentTimeStamp = Date.now();
+        const deltaTime = (currentTimeStamp - lastTimestamp) * 0.001; //сколько секунд прошло с прошлого кадра
+
+        if (gameObjects.enemys.length == 0) {
+            createEnemys(gameObjects.enemys);
+        }
+        createNewAdvEnemy(gameObjects.advEnemy);
+        lastTimestamp = currentTimeStamp;
+        if (!keyPressedFlag.stop) {
+            processEvents(keyPressedFlag, gameObjects);
+            update({gameObjects, deltaTime});
+            redraw({ctx, gameObjects, width, height});
+        }
+
+        gameState = checkGameState(gameObjects, gameState);
+        if (gameState != STOP) {
+            requestAnimationFrame(animateFn);
+        }
+    };
+    animateFn();
 }
 
 main();

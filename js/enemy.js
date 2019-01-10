@@ -1,4 +1,5 @@
-import {WIDTH, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ROCKET_HEIGHT, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE} from './config.js';
+import {WIDTH, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ROCKET_HEIGHT, ADV_ENEMY_SHOOTING_TIME, 
+    ADV_ENEMY_LINE} from './config.js';
 import {Bullet} from './bullets.js';
 import {ROCKET_DESTRUCTION_RADIUS} from './rocket.js';
 import {conflictHandling, rectangleConflictHandling} from './conflict.js';
@@ -8,7 +9,7 @@ const ADV_ENEMY_START_POS = 100;
 const ENEMY_HORIZONTAL_SPEED = 100;
 const ENEMY_SIDE = 25;
 const ADV_ENEMY_HEALTH = 5;
-const ADV_ENEMY_LIFES = 1;
+const ADV_ENEMY_LIFES = 3;
 
 function Enemy({
     startX,
@@ -72,6 +73,7 @@ function createAdvEnemy(advEnemyPosition) {
     });
 }
 
+// переименовать функцию
 function getAdvancedEnemyParam({advEnemyPosition, advEnemyDirection}) {
     if (Math.random() < 0.5) {
         advEnemyPosition = -ADV_ENEMY_START_POS;
@@ -88,6 +90,7 @@ function moveEnemys({enemys, deltaTime}) {
     for (const enemy of enemys) {
         enemy.x += ENEMY_HORIZONTAL_SPEED * speedCoef * deltaTime * enemy.direction;
     }
+
     if (((enemys[0].x <= ENEMY_SIDE) && (enemys[0].direction == LEFT)) ||
     (((enemys[enemys.length - 1].x + ENEMY_SIDE) >= WIDTH - ENEMY_SIDE) && (enemys[enemys.length -1].direction == RIGHT))) {
         for (const enemy of enemys) {
@@ -120,19 +123,6 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
         (advEnemy.direction == 1) ? advEnemy.x = 0: advEnemy.x = WIDTH;
     }
 }
-/*
-function conflictHandling({object1, objectSize1, object2, objectSize2}) {
-    let isObject1LeftHandling = (object1.x + objectSize1 > object2.x);
-    let isObject1RightHandling = (object1.x - objectSize1 < object2.x + objectSize2);
-    let isObject1DownHandling = (object1.y - objectSize1 < object2.y + objectSize2);
-    let isObject1UpHandling = true;//(object2.y - object1.y < objectSize1);
-
-    if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling) && (isObject1UpHandling)) {
-        return true;
-    } else {
-    return false;}
-}
-*/
 
 function advEnemyConflictHandling({advEnemy, bullets, rockets, ship}) {
     for (let i = 0; i < bullets.length; i++) {
@@ -161,7 +151,14 @@ function enemyConflictHandling({enemys, bullets, rockets, ship}) {
     let isHit = false;
     for (const bullet of bullets) {
         for (let i = 0; i < enemys.length; i++) {
-            if (conflictHandling({object1: bullet, objectSize1: BULLET_SIZE, object2: enemys[i], objectSize2: ENEMY_SIDE})) {
+            const param1 = conflictHandling({
+                object1: bullet, 
+                objectSize1: BULLET_SIZE, 
+                object2: enemys[i], 
+                objectSize2: ENEMY_SIDE
+            });
+
+            if (param1) {
                 enemys.splice(i, 1);
                 ship.scores += 10;
             }

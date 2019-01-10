@@ -1,0 +1,46 @@
+{% extends "layout.twig" %}
+
+{% block title %}Galaxian{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="personal_accaunt_header">Профиль пользователя {{ username }}</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm-8">
+            <ul class="nav flex-sm-column">
+                <form  action="/inc/edit_profile.php">
+                    <div class="form-group">
+                        <label class="sr-only" for="username">Login</label>
+                        <input type="text" class="form-control btn_menu" id="username" name="username" required="" value={{ username }}>
+                        <label for="password" class="sr-only">Password</label>
+                        <input type="password" id="password"  name="password" class="form-control btn_menu" placeholder="Password" required="" readonly>
+                        <label for="reEnterPassword"" class="sr-only">Password</label>
+                        <input type="password" id="reenter_password" name="confirmed_password" class="form-control btn_menu" placeholder="Reenter Password" required="" readonly>
+                        <label class="form-check-label">
+                            <input id="change_pass" class="form-check-input" type="checkbox"> Сменить пароль
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="friends_list">Друзья:</label>
+                        <select multiple class="form-control friends_selector" id="friends_list">
+                            {% for friend in friends %}
+                                <option>{{ friend }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="error_registration" class="error_registration"></div> 
+                    <button id="change_user_info_btn" type="button" class="btn btn-primary">Изменить</button>
+                </form>   
+            </ul>
+        </div>
+        <div class="col-sm"></div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/edit_profile.js"></script>
+{% endblock %}

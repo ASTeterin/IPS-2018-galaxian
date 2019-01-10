@@ -20,9 +20,10 @@ if (empty($registredUsers)) {
 }
 
 if (checkPassword($name, $password)) {
-    //header("Location: ../personal_accaunt.php");
+    
     saveToSession('username', $name);
     echo json_encode(ERR_NO_ERROR);
+    //header("Location: ../personal_accaunt.php");
     exit();
 } else {
     //echo json_encode(['error_code' => ERR_INCORRECT_PASS]);

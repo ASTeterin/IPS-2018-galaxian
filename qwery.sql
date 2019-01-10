@@ -15,6 +15,13 @@ $qweryString = "CREATE TABLE users
     registration_date DATE
 ) ENGINE INNODB DEFAULT CHARSET = UTF8;";
 
+CREATE TABLE friends
+(
+    id SERIAL,
+    user_id BIGINT,
+    friend_id BIGINT 
+) ENGINE INNODB DEFAULT CHARSET = UTF8;
+
 $qwery = "show databases";
 
 $result = dbQuery($qweryString);
@@ -24,6 +31,8 @@ INSERT INTO users
 (user_name, user_password, registration_date)
 VALUES
 ()
+
+DELETE FROM users WHERE user_id < 165;
 
 CREATE TABLE result
 (
@@ -44,3 +53,5 @@ SELECT users.user_name, result.game_date, result.scores
 FROM users
 INNER JOIN result USING (user_id)
 ORDER BY result.scores DESC;
+
+

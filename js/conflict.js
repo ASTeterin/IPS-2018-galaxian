@@ -5,6 +5,7 @@ function conflictHandling({object1, objectSize1, object2, objectSize2}) {
     const isObject1DownHandling = (Math.abs( object1.y - object2.y) < objectSize1 + objectSize2);
     //const isObject1UpHandling = (Math.abs( object1.y - object2.y) > objectSize1);
 
+    //return (isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling);
     if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling) /*&& (isObject1UpHandling)*/) {
         return true;
     } else {

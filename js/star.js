@@ -8,7 +8,7 @@ function Star({
     startY    
 }) {
     this.x = startX;
-    this.y = startY
+    this.y = startY,
 }
 
 function createStars(stars) {

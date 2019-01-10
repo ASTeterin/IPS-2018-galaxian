@@ -1,12 +1,4 @@
 <?php
-  
-    /*const DB_HOST = "localhost";
-    const DB_USER = "root";
-    const DB_PASS = "Qwerty123";
-    const DB_NAME = "galaxian";
-    const DB_PORT = "3306";
-  */
-
     
     $g_dbLink = null;
     
@@ -14,6 +6,7 @@
     {
         global $g_dbLink;
         $g_dbLink = mysqli_connect("localhost", "root", "Qwerty123", "galaxian");
+        mysqli_set_charset($g_dbLink, "utf8");
         
         $error = mysqli_connect_error();
         if ($error)

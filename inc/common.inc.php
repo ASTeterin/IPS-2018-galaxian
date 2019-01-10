@@ -1,4 +1,6 @@
 ﻿<?php
+    header('Content-Type: text/html; charset= utf-8');
+    
     chdir(dirname(__FILE__));
     define('ROOT_DIR', dirname(dirname(__FILE__) . "../"));
     define('TEMPLATE_DIR', ROOT_DIR . '/template');
