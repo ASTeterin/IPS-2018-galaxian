@@ -75,29 +75,29 @@ function drawAdvEnemy(ctx, advEnemy) {
     ctx.drawImage(img, advEnemy.x, advEnemy.y - 30);
 }
 
-function redraw({ctx, gameObjects, width, height}) {
+function redraw({ctx, gameContext, width, height}) {
     drawCosmos(ctx, width, height);
-    drawStars(ctx, gameObjects.stars);
-    drawShip(ctx, gameObjects.ship, SIDE);
-    if (gameObjects.garbage) {
-        drawGarbage(ctx, gameObjects.garbage);
+    drawStars(ctx, gameContext.stars);
+    drawShip(ctx, gameContext.ship, SIDE);
+    if (gameContext.garbage) {
+        drawGarbage(ctx, gameContext.garbage);
     }
-    if ((gameObjects.advEnemy) && (gameObjects.advEnemy.health > 0)) {
-        drawAdvEnemy(ctx, gameObjects.advEnemy);
+    if ((gameContext.advEnemy) && (gameContext.advEnemy.health > 0)) {
+        drawAdvEnemy(ctx, gameContext.advEnemy);
     }
-    for (const enemy of gameObjects.enemys) {
+    for (const enemy of gameContext.enemys) {
         drawEnemy(ctx, enemy, ENEMY_SIDE);
     }
-    for (const bullet of gameObjects.bullets) {
+    for (const bullet of gameContext.bullets) {
         drawBullet({ctx, bullet, bulletColor: MY_BULLET_COLOR});
     }
-    for (const bullet of gameObjects.enemyBullets) {
+    for (const bullet of gameContext.enemyBullets) {
         drawBullet({ctx, bullet, bulletColor: ENEMY_BULLET_COLOR});
     }
-    for (const rocket of gameObjects.rockets) {
+    for (const rocket of gameContext.rockets) {
         drawRocket({ctx, rocket});
     }
-    showGameInfo(gameObjects.ship);
+    showGameInfo(gameContext.ship);
 }
 
 function showGameInfo(ship) {

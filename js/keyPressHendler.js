@@ -12,7 +12,7 @@ function KeyPressedFlag({
     this.rocketShoot = rocketShoot;
 }
 
-function keyPressHendler(keyPressedFlag, gameObjects) {
+function keyPressHendler(keyPressedFlag, gameContext) {
     document.addEventListener('keydown', (event) => {
         if (event.keyCode == KEY_CODES.LEFT) {
             keyPressedFlag.left = true;
@@ -25,7 +25,7 @@ function keyPressHendler(keyPressedFlag, gameObjects) {
         }
 
         if ((event.keyCode == KEY_CODES.ROCKETSHOOT) && (!keyPressedFlag.rocketShoot)) {
-            if (gameObjects.ship.countRockets) {
+            if (gameContext.ship.countRockets) {
                 keyPressedFlag.rocketShoot = true;
             }
         }

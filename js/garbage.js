@@ -1,6 +1,6 @@
 
 import {HEIGHT, WIDTH, GARBAGE_SPEED, BULLET_SIZE} from './config.js';
-import {ringConflictHandling} from './conflict.js';
+import {ringConflictHandling} from './collision.js';
 const GARBAGE_SIZE = 20;
 const GARBAGE_SPEED_COEF = 2.6;
 

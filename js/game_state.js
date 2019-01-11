@@ -2,18 +2,18 @@ import {showInfo} from './game_info.js';
 import {STOP, WIN, LOOSE} from './config.js';
 import {postRequest} from './request.js';
 
-function isLoose(gameObjects) {
+function isLoose(gameContext) {
     let isEndGame = false;
 
-    if (gameObjects.ship.lifes <= 0) {
+    if (gameContext.ship.lifes <= 0) {
         isEndGame = true;
     }
     return isEndGame;
 }
 
-function isWin(gameObjects) {
+function isWin(gameContext) {
     let isEndGame = false;
-    if (gameObjects.advEnemy.lifes <= 0) {
+    if (gameContext.advEnemy.lifes <= 0) {
         isEndGame = true;
     }
     return isEndGame;
@@ -24,13 +24,13 @@ function saveScores(score) {
     postRequest('./inc/result.inc.php', data);
 }
 
-function checkGameState(gameObjects, gameState, ship) {
-    if (isLoose(gameObjects)) {
+function checkGameState(gameContext, gameState, ship) {
+    if (isLoose(gameContext)) {
         gameState = STOP;
         showInfo(LOOSE);
     }
-    if (isWin(gameObjects)) {
-        saveScores(gameObjects.ship.scores);
+    if (isWin(gameContext)) {
+        saveScores(gameContext.ship.scores);
         gameState = STOP;
         showInfo(WIN);
     }

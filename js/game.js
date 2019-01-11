@@ -1,12 +1,12 @@
 import {redraw} from './draw.js';
 import {updateAdvancedEnemys, setAdvancedEnemyParam, createEnemys, updateEnemys, createNewAdvEnemy} from './enemy.js';
 import {moveBullets, createNewShoot} from './bullets.js';
-import {START_GAME, STOP, LEFT, RIGHT} from './config.js';
+import {STOP, LEFT, RIGHT} from './config.js';
 import {moveShip, myShipConflictHandling} from './ship.js';
 import {updateRockets} from './rocket.js';
-import {createStars, updateStars} from './star.js';
+import {updateStars} from './star.js';
 import {keyPressHendler} from './keyPressHendler.js';
-import {GameObjects} from './gameObjects.js';
+import {GameContext} from './gameContext.js';
 import {updateGarbage} from './garbage.js';
 import {checkGameState} from './game_state.js';
 
@@ -28,16 +28,16 @@ function KeyPressedFlag({
     this.stop = stop;
 }
 
-function update({gameObjects, deltaTime}) {
-    moveShip({ship: gameObjects.ship, deltaTime});
-    moveBullets({bullets: gameObjects.bullets, deltaTime, direction: MY_BULLET_DIRECTION});
-    updateGarbage(gameObjects.garbage, deltaTime, gameObjects.bullets);
-    updateAdvancedEnemys({advEnemy: gameObjects.advEnemy, deltaTime, ship: gameObjects.ship, bullets: gameObjects.bullets, enemyBullets: gameObjects.enemyBullets, rockets: gameObjects.rockets});
-    updateEnemys({enemys: gameObjects.enemys, deltaTime, bullets: gameObjects.bullets, rockets: gameObjects.rockets, enemyBullets: gameObjects.enemyBullets, ship: gameObjects.ship});
-    moveBullets({bullets: gameObjects.enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
-    updateRockets({rockets: gameObjects.rockets, deltaTime});
-    myShipConflictHandling({ship: gameObjects.ship, enemyBullets: gameObjects.enemyBullets, garbage: gameObjects.garbage});
-    updateStars({stars: gameObjects.stars, deltaTime});
+function update({gameContext, deltaTime}) {
+    moveShip({ship: gameContext.ship, deltaTime});
+    moveBullets({bullets: gameContext.bullets, deltaTime, direction: MY_BULLET_DIRECTION});
+    updateGarbage(gameContext.garbage, deltaTime, gameContext.bullets);
+    updateAdvancedEnemys({advEnemy: gameContext.advEnemy, deltaTime, ship: gameContext.ship, bullets: gameContext.bullets, enemyBullets: gameContext.enemyBullets, rockets: gameContext.rockets});
+    updateEnemys({enemys: gameContext.enemys, deltaTime, bullets: gameContext.bullets, rockets: gameContext.rockets, enemyBullets: gameContext.enemyBullets, ship: gameContext.ship});
+    moveBullets({bullets: gameContext.enemyBullets, deltaTime, direction: ENEMY_BULLET_DIRECTION});
+    updateRockets({rockets: gameContext.rockets, deltaTime});
+    myShipConflictHandling({ship: gameContext.ship, enemyBullets: gameContext.enemyBullets, garbage: gameContext.garbage});
+    updateStars({stars: gameContext.stars, deltaTime});
 }
 
 
@@ -56,27 +56,27 @@ function modalWindowProcessing(keyPressedFlag, gameState) {
 }
 
 
-function processEvents(keyPressedFlag, gameObjects) {
+function processEvents(keyPressedFlag, gameContext) {
     if ((keyPressedFlag.left) && (!keyPressedFlag.right)) {
-        gameObjects.ship.direction = LEFT;
+        gameContext.ship.direction = LEFT;
     }
     if ((keyPressedFlag.right) && (!keyPressedFlag.left)) {
-        gameObjects.ship.direction = RIGHT;
+        gameContext.ship.direction = RIGHT;
     }
     if ((!keyPressedFlag.left) && (!keyPressedFlag.right)) {
-        gameObjects.ship.direction = 0;
+        gameContext.ship.direction = 0;
     }
-    if ((keyPressedFlag.shoot) && (gameObjects.ship.canShoot)) {
-        createNewShoot(gameObjects.bullets, gameObjects.ship);
-        gameObjects.ship.canShoot = false;
+    if ((keyPressedFlag.shoot) && (gameContext.ship.canShoot)) {
+        createNewShoot(gameContext.bullets, gameContext.ship);
+        gameContext.ship.canShoot = false;
     }
     if ((!keyPressedFlag.shoot) && (!keyPressedFlag.rocketShoot)) {
-        gameObjects.ship.canShoot = true;
+        gameContext.ship.canShoot = true;
     }
-    if ((keyPressedFlag.rocketShoot) && (gameObjects.ship.canShoot)) {
-        createNewShoot(gameObjects.rockets, gameObjects.ship);
-        gameObjects.ship.countRockets--;
-        gameObjects.ship.canShoot = false;
+    if ((keyPressedFlag.rocketShoot) && (gameContext.ship.canShoot)) {
+        createNewShoot(gameContext.rockets, gameContext.ship);
+        gameContext.ship.countRockets--;
+        gameContext.ship.canShoot = false;
     }
 }
 
@@ -89,12 +89,10 @@ function main() {
 
     const advEnemyPosition = 0;
     const advEnemyDirection = 0;
-    let gameObjects = null;
-    let gameState = START_GAME;
-
+    let gameContext = null;
 
     setAdvancedEnemyParam({advEnemyPosition, advEnemyDirection});
-    gameObjects = new GameObjects(width, height, advEnemyPosition);
+    gameContext = new GameContext(width, height, advEnemyPosition);
     const keyPressedFlag = new KeyPressedFlag({
         left: false,
         right: false,
@@ -103,11 +101,11 @@ function main() {
         stop: true,
     });
    
-    keyPressHendler(keyPressedFlag, gameObjects);
-    modalWindowProcessing(keyPressedFlag, gameState);
+    keyPressHendler(keyPressedFlag, gameContext);
+    modalWindowProcessing(keyPressedFlag, gameContext.gameState);
 
     let lastTimestamp = Date.now(); //текущее время в ms
-    if (!((keyPressedFlag.stop) || (gameState == STOP))) {
+    if (!((keyPressedFlag.stop) || (gameContext.gameState == STOP))) {
         return;
     }
     
@@ -115,19 +113,19 @@ function main() {
         const currentTimeStamp = Date.now();
         const deltaTime = (currentTimeStamp - lastTimestamp) * 0.001; //сколько секунд прошло с прошлого кадра
 
-        if (gameObjects.enemys.length == 0) {
-            createEnemys(gameObjects.enemys);
+        if (gameContext.enemys.length == 0) {
+            createEnemys(gameContext.enemys);
         }
-        createNewAdvEnemy(gameObjects.advEnemy);
+        createNewAdvEnemy(gameContext.advEnemy);
         lastTimestamp = currentTimeStamp;
         if (!keyPressedFlag.stop) {
-            processEvents(keyPressedFlag, gameObjects);
-            update({gameObjects, deltaTime});
-            redraw({ctx, gameObjects, width, height});
+            processEvents(keyPressedFlag, gameContext);
+            update({gameContext, deltaTime});
+            redraw({ctx, gameContext, width, height});
         }
 
-        gameState = checkGameState(gameObjects, gameState);
-        if (gameState != STOP) {
+        gameContext.gameState = checkGameState(gameContext, gameContext.gameState);
+        if (gameContext.gameState != STOP) {
             requestAnimationFrame(animateFn);
         }
     };

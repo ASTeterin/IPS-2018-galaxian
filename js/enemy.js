@@ -2,7 +2,7 @@ import {WIDTH, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ROCKET
     ADV_ENEMY_LINE} from './config.js';
 import {Bullet} from './bullets.js';
 import {ROCKET_DESTRUCTION_RADIUS} from './rocket.js';
-import {conflictHandling, rectangleConflictHandling} from './conflict.js';
+import {conflictHandling, rectangleConflictHandling} from './collision.js';
 
 
 const ADV_ENEMY_START_POS = 100;
@@ -166,14 +166,14 @@ function enemyConflictHandling({enemys, bullets, rockets, ship}) {
     let isHit = false;
     for (const bullet of bullets) {
         for (let i = 0; i < enemys.length; i++) {
-            const param1 = conflictHandling({
+            const isConflictWithBullet = conflictHandling({
                 object1: bullet,
                 objectSize1: BULLET_SIZE,
                 object2: enemys[i],
                 objectSize2: ENEMY_SIDE,
             });
 
-            if (param1) {
+            if (isConflictWithBullet) {
                 enemys.splice(i, 1);
                 ship.scores += 10;
             }
@@ -184,14 +184,15 @@ function enemyConflictHandling({enemys, bullets, rockets, ship}) {
             return;
         }
         for (let i = 0; i < enemys.length;) {
-            if (rectangleConflictHandling({
+            const isConflictWithRocket = rectangleConflictHandling({
                 object1: rockets[j],
                 object1Width: BULLET_SIZE + ROCKET_DESTRUCTION_RADIUS,
                 object1Height: ROCKET_HEIGHT,
                 object2: enemys[i],
                 object2Width: ENEMY_SIDE,
                 object2Height: ENEMY_SIDE,
-            })) {
+            });
+            if (isConflictWithRocket) {
                 enemys.splice(i, 1);
                 ship.scores += 10;
                 isHit = true;

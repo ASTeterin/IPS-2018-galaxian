@@ -1,5 +1,5 @@
 import {SHIP_PARAMS, BULLET_SIZE, WIDTH, LEFT, RIGHT, HEIGHT} from './config.js';
-import {conflictHandling} from './conflict.js';
+import {conflictHandling} from './collision.js';
 
 const SHIP_SPEED = 100;
 const LIFE = 'life';
