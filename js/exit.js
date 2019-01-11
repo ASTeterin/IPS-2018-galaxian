@@ -15,7 +15,6 @@ function exitButtonClicked() {
 }
 
 function onComplete($response) {
-    //console.log($response.responseText);
     if ($response.responseText != 0) {
         window.location = 'index.php';
     }

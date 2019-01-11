@@ -1,4 +1,4 @@
-<div class="modal-sm modal fade show modal_window" id="winModal" tabindex="-1" data-keyboard="true" role="dialog" aria-labelledby="winModalLabel" aria-hidden="true">
+<div class="modal-sm modal fade show modal_window" id="win_modal" tabindex="-1" data-keyboard="true" role="dialog" aria-labelledby="winModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content stars">
             <div class="modal-body">
@@ -6,13 +6,18 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="exit_game_btn" class="btn btn-primary" onclick = "window.location = 'game.php'">Играть заново</button>
-                <button type="button" id="stay_in_game_bnt" class="btn btn-primary" onclick = "window.location = 'personal_accaunt.php'">Выход</button>
+                <button type="button" id="stay_in_game_bnt" class="btn btn-primary" onclick = "window.location = 
+                {% if username == '' %}
+                    'index.php'">Выход</button>
+                {% else %}
+                    'personal_accaunt.php'">Выход</button>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal-sm modal fade show modal_window" id="looseModal" tabindex="-1" data-keyboard="true" role="dialog" aria-labelledby="looseModalLabel" aria-hidden="true">
+<div class="modal-sm modal fade show modal_window" id="loose_modal" tabindex="-1" data-keyboard="true" role="dialog" aria-labelledby="looseModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content stars">
             <div class="modal-body">
@@ -20,7 +25,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="exit_game_btn" class="btn btn-primary" onclick = "window.location = 'game.php'">Играть заново</button>
-                <button type="button" id="stay_in_game_bnt" class="btn btn-primary" onclick = "window.location = 'personal_accaunt.php'">Выход</button>
+                <button type="button" id="stay_in_game_bnt" class="btn btn-primary" onclick = "window.location = 
+                {% if username == '' %}
+                    'index.php'">Выход</button>
+                {% else %}
+                    'personal_accaunt.php'">Выход</button>
+                {% endif %}
             </div>
         </div>
     </div>

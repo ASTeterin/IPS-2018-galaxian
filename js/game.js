@@ -102,7 +102,7 @@ function main() {
         rocketShoot: false,
         stop: true,
     });
-    createStars(gameObjects.stars);
+   
     keyPressHendler(keyPressedFlag, gameObjects);
     modalWindowProcessing(keyPressedFlag, gameState);
 

@@ -3,14 +3,9 @@ function conflictHandling({object1, objectSize1, object2, objectSize2}) {
     const isObject1LeftHandling = ((object2.x - object1.x) < objectSize1);
     const isObject1RightHandling = ((object1.x - object2.x) < objectSize1 + objectSize2);
     const isObject1DownHandling = (Math.abs( object1.y - object2.y) < objectSize1 + objectSize2);
-    //const isObject1UpHandling = (Math.abs( object1.y - object2.y) > objectSize1);
+    const isCollision = ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling));
 
-    //return (isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling);
-    if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling) /*&& (isObject1UpHandling)*/) {
-        return true;
-    } else {
-        return false;
-    }
+    return isCollision;
 }
 
 function ringConflictHandling({object1, objectSize1, object2, objectSize2}) {
@@ -21,16 +16,13 @@ function ringConflictHandling({object1, objectSize1, object2, objectSize2}) {
     }
 }
 
-function rectangleConflictHandling({object1, object1Width, object1Height, object2, object2Width, object2Height}) {
+function rectangleConflictHandling({object1, object1Width, object2, object2Width, object2Height}) {
     const isObject1LeftHandling = (object1.x + object1Width > object2.x);
     const isObject1RightHandling = (object1.x - object1Width < object2.x + object2Width);
     const isObject1DownHandling = (object1.y < object2.y + object2Height);
+    const isCollision = ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling));
 
-    if ((isObject1LeftHandling) && (isObject1RightHandling) && (isObject1DownHandling)) {
-        return true;
-    } else {
-        return false;
-    }
+    return isCollision;
 }
 
 export {conflictHandling, rectangleConflictHandling, ringConflictHandling};

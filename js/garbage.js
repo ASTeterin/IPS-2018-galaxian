@@ -2,6 +2,7 @@
 import {HEIGHT, WIDTH, GARBAGE_SPEED, BULLET_SIZE} from './config.js';
 import {ringConflictHandling} from './conflict.js';
 const GARBAGE_SIZE = 20;
+const GARBAGE_SPEED_COEF = 2.6;
 
 function Garbage() {
     this.x = getStartGarbagePosition();
@@ -34,7 +35,7 @@ function moveGarbage(garbage, deltaTime) {
                 garbage.content = getGarbageContent();
                 garbage.x = getStartGarbagePosition();
             }
-            garbage.y += deltaTime * GARBAGE_SPEED * 2.6;
+            garbage.y += deltaTime * GARBAGE_SPEED * GARBAGE_SPEED_COEF;
             if (!garbage.isBonus) {
                 garbage.x = 50 * Math.sin(garbage.y * 7 / WIDTH) + garbage.axis;
             } else {
@@ -49,13 +50,13 @@ function moveGarbage(garbage, deltaTime) {
 function garbageConflictHandling(garbage, bullets) {
     if (!garbage.isBonus) {
         for (let i = 0; i < bullets.length; i++) {
-            if (ringConflictHandling({object1: garbage,
+            if (ringConflictHandling({
+                object1: garbage,
                 objectSize1: garbage.size,
                 object2: bullets[i],
                 objectSize2: BULLET_SIZE,
             })) {
                 bullets.splice(i, 1);
-                //garbage.size = BONUS_SIZE;
                 garbage.isBonus = true;
             }
         }

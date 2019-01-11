@@ -1,4 +1,4 @@
-import {WIDTH, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ROCKET_HEIGHT, ADV_ENEMY_SHOOTING_TIME, 
+import {WIDTH, LEFT, RIGHT, COUNT_ENEMY_IN_LINE, ENEMY_LINE, BULLET_SIZE, ROCKET_HEIGHT, ADV_ENEMY_SHOOTING_TIME,
     ADV_ENEMY_LINE} from './config.js';
 import {Bullet} from './bullets.js';
 import {ROCKET_DESTRUCTION_RADIUS} from './rocket.js';
@@ -91,8 +91,11 @@ function moveEnemys({enemys, deltaTime}) {
         enemy.x += ENEMY_HORIZONTAL_SPEED * speedCoef * deltaTime * enemy.direction;
     }
 
-    if (((enemys[0].x <= ENEMY_SIDE) && (enemys[0].direction == LEFT)) ||
-    (((enemys[enemys.length - 1].x + ENEMY_SIDE) >= WIDTH - ENEMY_SIDE) && (enemys[enemys.length -1].direction == RIGHT))) {
+    const isLeftEnemyNearBorder = ((enemys[0].x <= ENEMY_SIDE) && (enemys[0].direction == LEFT));
+    const isRightEnemyNearBorder = (((enemys[enemys.length - 1].x + ENEMY_SIDE) >= WIDTH - ENEMY_SIDE) &&
+    (enemys[enemys.length -1].direction == RIGHT));
+
+    if (isLeftEnemyNearBorder || isRightEnemyNearBorder) {
         for (const enemy of enemys) {
             enemy.direction *= -1;
         }
@@ -112,12 +115,19 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
     }
 
     advEnemy.x += ENEMY_HORIZONTAL_SPEED * deltaTime * speedCoef * advEnemy.direction;
-    if (((ship.x > advEnemy.x) && (advEnemy.direction == RIGHT)) || ((ship.x < advEnemy.x) && (advEnemy.direction == LEFT))) {
+
+    const isShipEnterInRange = ((ship.x > advEnemy.x) && (advEnemy.direction == RIGHT));
+    const isShipOutOfRange = ((ship.x < advEnemy.x) && (advEnemy.direction == LEFT));
+
+    if (isShipEnterInRange || isShipOutOfRange) {
         (advEnemy.direction == 1) ? coef = 0: coef = 1;
         advEnemy.y = WIDTH * coef - advEnemy.x * (-advEnemy.direction);
     }
 
-    if (((advEnemy.x >= 2 * WIDTH) && (advEnemy.direction == RIGHT)) || ((advEnemy.x < - WIDTH) && (advEnemy.direction == LEFT))) {
+    const isAdvEnemyBehindLeftBorder = ((advEnemy.x >= 2 * WIDTH) && (advEnemy.direction == RIGHT));
+    const isAdvEnemyBehindRightBorder = ((advEnemy.x < - WIDTH) && (advEnemy.direction == LEFT));
+
+    if (isAdvEnemyBehindLeftBorder || isAdvEnemyBehindRightBorder) {
         advEnemy.direction *= -1;
         advEnemy.y = ADV_ENEMY_START_POS;
         (advEnemy.direction == 1) ? advEnemy.x = 0: advEnemy.x = WIDTH;
@@ -126,7 +136,12 @@ function moveAdvEnemy({advEnemy, deltaTime, ship}) {
 
 function advEnemyConflictHandling({advEnemy, bullets, rockets, ship}) {
     for (let i = 0; i < bullets.length; i++) {
-        if (conflictHandling({object1: bullets[i], objectSize1: BULLET_SIZE, object2: advEnemy, objectSize2: ENEMY_SIDE})) {
+        if (conflictHandling({
+            object1: bullets[i],
+            objectSize1: BULLET_SIZE,
+            object2: advEnemy,
+            objectSize2: ENEMY_SIDE}
+        )) {
             bullets.splice(i, 1);
             advEnemy.health --;
         }
@@ -152,10 +167,10 @@ function enemyConflictHandling({enemys, bullets, rockets, ship}) {
     for (const bullet of bullets) {
         for (let i = 0; i < enemys.length; i++) {
             const param1 = conflictHandling({
-                object1: bullet, 
-                objectSize1: BULLET_SIZE, 
-                object2: enemys[i], 
-                objectSize2: ENEMY_SIDE
+                object1: bullet,
+                objectSize1: BULLET_SIZE,
+                object2: enemys[i],
+                objectSize2: ENEMY_SIDE,
             });
 
             if (param1) {
@@ -165,28 +180,28 @@ function enemyConflictHandling({enemys, bullets, rockets, ship}) {
         }
     }
     for (let j = 0; j < rockets.length; j++) {
-        if (rockets[j].y <= ENEMY_LINE) {
-            for (let i = 0; i < enemys.length;) {
-                if (rectangleConflictHandling({
-                    object1: rockets[j],
-                    object1Width: BULLET_SIZE + ROCKET_DESTRUCTION_RADIUS,
-                    object1Height: ROCKET_HEIGHT,
-                    object2: enemys[i],
-                    object2Width: ENEMY_SIDE,
-                    object2Height: ENEMY_SIDE,
-                })) {
-                    enemys.splice(i, 1);
-                    ship.scores += 10;
-
-                    isHit = true;
-                } else {
-                    i++;
-                }
+        if (rockets[j].y > ENEMY_LINE) {
+            return;
+        }
+        for (let i = 0; i < enemys.length;) {
+            if (rectangleConflictHandling({
+                object1: rockets[j],
+                object1Width: BULLET_SIZE + ROCKET_DESTRUCTION_RADIUS,
+                object1Height: ROCKET_HEIGHT,
+                object2: enemys[i],
+                object2Width: ENEMY_SIDE,
+                object2Height: ENEMY_SIDE,
+            })) {
+                enemys.splice(i, 1);
+                ship.scores += 10;
+                isHit = true;
+            } else {
+                i++;
             }
-            if (isHit) {
-                rockets.splice(j, 1);
-                isHit = false;
-            }
+        }
+        if (isHit) {
+            rockets.splice(j, 1);
+            isHit = false;
         }
     }
 }
@@ -199,7 +214,10 @@ function shootingEnemys({enemys, deltaTime, enemyBullets}) {
             enemy.shootingTime = Math.random() * 10;
         }
         if (enemy.isShooting) {
-            enemyBullets.push(new Bullet({startX: enemy.x + ENEMY_SIDE / 2, startY: enemy.y + ENEMY_SIDE * Math.cos(Math.PI / 3)}));
+            enemyBullets.push(new Bullet({
+                startX: enemy.x + ENEMY_SIDE / 2,
+                startY: enemy.y + ENEMY_SIDE * Math.cos(Math.PI / 3)})
+            );
             enemy.isShooting = false;
         }
     }
@@ -238,11 +256,16 @@ function createNewAdvEnemy(advEnemy) {
     }
 }
 
-export {Enemy};
-export {AdvancedEnemy, updateAdvancedEnemys, createAdvEnemy};
-export {createEnemys, updateEnemys};
-export {shootingEnemys};
-export {shootingAdvEnemy};
-export {setAdvancedEnemyParam};
-export {advEnemyConflictHandling};
-export {enemyConflictHandling, createNewAdvEnemy};
+export {
+    Enemy,
+    AdvancedEnemy,
+    updateAdvancedEnemys,
+    createAdvEnemy,
+    createEnemys,
+    updateEnemys,
+    shootingEnemys,
+    shootingAdvEnemy,
+    setAdvancedEnemyParam,
+    advEnemyConflictHandling,
+    enemyConflictHandling,
+    createNewAdvEnemy};

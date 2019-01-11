@@ -24,20 +24,30 @@ const ADV_ENEMY_SHOOTING_TIME = 0.2;
 const GARBAGE_SPEED = 50;
 
 const KEY_CODES = {
-    'KEY_CODE_LEFT': 37,
-    'KEY_CODE_RIGHT': 39,
-    'KEY_CODE_SHOOT': 32,
-    'KEY_CODE_ROCKETSHOOT': 17,
-    'KEY_CODE_PAUSE': 27,
+    'LEFT': 37,
+    'RIGHT': 39,
+    'SHOOT': 32,
+    'ROCKETSHOOT': 17,
+    'PAUSE': 27,
 };
 
 
-export {WIDTH};
-export {HEIGHT};
-export {LEFT, RIGHT, START_GAME, STOP, WIN, LOOSE};
-export {COUNT_ENEMY_IN_LINE, ENEMY_LINE, ADV_ENEMY_SHOOTING_TIME, ADV_ENEMY_LINE};
-export {SHIP_PARAMS};
-export {BULLET_SIZE};
-export {KEY_CODES};
-export {ROCKET_HEIGHT};
-export {GARBAGE_SPEED};
+export {
+    WIDTH,
+    HEIGHT,
+    LEFT,
+    RIGHT,
+    START_GAME,
+    STOP,
+    WIN,
+    LOOSE,
+    COUNT_ENEMY_IN_LINE,
+    ENEMY_LINE,
+    ADV_ENEMY_SHOOTING_TIME,
+    ADV_ENEMY_LINE,
+    SHIP_PARAMS,
+    BULLET_SIZE,
+    KEY_CODES,
+    ROCKET_HEIGHT,
+    GARBAGE_SPEED,
+};

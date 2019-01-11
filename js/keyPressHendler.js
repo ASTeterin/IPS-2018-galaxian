@@ -14,23 +14,23 @@ function KeyPressedFlag({
 
 function keyPressHendler(keyPressedFlag, gameObjects) {
     document.addEventListener('keydown', (event) => {
-        if (event.keyCode == KEY_CODES.KEY_CODE_LEFT) {
+        if (event.keyCode == KEY_CODES.LEFT) {
             keyPressedFlag.left = true;
         }
-        if ((event.keyCode == KEY_CODES.KEY_CODE_RIGHT)) {
+        if ((event.keyCode == KEY_CODES.RIGHT)) {
             keyPressedFlag.right = true;
         }
-        if ((event.keyCode == KEY_CODES.KEY_CODE_SHOOT) && (!keyPressedFlag.shoot)) {
+        if ((event.keyCode == KEY_CODES.SHOOT) && (!keyPressedFlag.shoot)) {
             keyPressedFlag.shoot = true;
         }
 
-        if ((event.keyCode == KEY_CODES.KEY_CODE_ROCKETSHOOT) && (!keyPressedFlag.rocketShoot)) {
+        if ((event.keyCode == KEY_CODES.ROCKETSHOOT) && (!keyPressedFlag.rocketShoot)) {
             if (gameObjects.ship.countRockets) {
                 keyPressedFlag.rocketShoot = true;
             }
         }
 
-        if (event.keyCode == KEY_CODES.KEY_CODE_PAUSE) {
+        if (event.keyCode == KEY_CODES.PAUSE) {
             const exitModalWindow = document.getElementById('exitModal');
             const display = window.getComputedStyle(exitModalWindow).display;
             if (display == 'none') {
@@ -44,16 +44,16 @@ function keyPressHendler(keyPressedFlag, gameObjects) {
     });
 
     document.addEventListener('keyup', (event) => {
-        if (event.keyCode == KEY_CODES.KEY_CODE_LEFT) {
+        if (event.keyCode == KEY_CODES.LEFT) {
             keyPressedFlag.left = false;
         }
-        if (event.keyCode == KEY_CODES.KEY_CODE_RIGHT) {
+        if (event.keyCode == KEY_CODES.RIGHT) {
             keyPressedFlag.right = false;
         }
-        if (event.keyCode == KEY_CODES.KEY_CODE_SHOOT) {
+        if (event.keyCode == KEY_CODES.SHOOT) {
             keyPressedFlag.shoot = false;
         }
-        if (event.keyCode == KEY_CODES.KEY_CODE_ROCKETSHOOT) {
+        if (event.keyCode == KEY_CODES.ROCKETSHOOT) {
             keyPressedFlag.rocketShoot = false;
         }
     });

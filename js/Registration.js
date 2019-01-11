@@ -4,7 +4,7 @@ function onWindowLoaded() {
     registerButtonClicked();
     loginFieldClicked();
     removeErrorState('#password', 'error_in_field');
-    removeErrorState('#reEnterPassword', 'error_in_field');
+    removeErrorState('#reenter_password', 'error_in_field');
 }
 
 function clearErrorInfoField($fieldName) {
@@ -21,12 +21,12 @@ function registerButtonClicked() {
     $('#registr_user_btn').click(function() {
         $login = $('#username').val();
         $password = $('#password').val();
-        $confirmedPassword = $('#reEnterPassword').val();
+        $confirmedPassword = $('#reenter_password').val();
         if (($login != '') && ($password != '') && ($confirmedPassword != '')) {
             event.preventDefault();
             if ($password != $confirmedPassword) {
                 $('#password').addClass('error_in_field');
-                $('#reEnterPassword').addClass('error_in_field');
+                $('#reenter_password').addClass('error_in_field');
             } else {
                 const $data = {'login': $login, 'password': $password};
                 $.ajax({
@@ -39,7 +39,7 @@ function registerButtonClicked() {
             }
         }
         $('#password').removeClass('error_in_field');
-        $('#reEnterPassword').removeClass('error_in_field');
+        $('#reenter_password').removeClass('error_in_field');
     });
 }
 
@@ -73,8 +73,6 @@ function onComplete($response) {
     if ($responseObj.status === 1) {
         $('.modal').modal('hide');
         showUserInfo($responseObj.name);
-        //$('#info_modal').modal('show');
-        //$('#user_name').text($responseObj.name);
         $('#login').val($responseObj.name);
     } else {
         $('#error_registration').text('User alrady exist');
