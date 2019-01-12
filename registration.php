@@ -19,10 +19,6 @@ $userId = registerUser($name, $hash_password);
 
 echo json_encode(['success' => $name], JSON_UNESCAPED_UNICODE);
 
-//echo json_encode(['success' => 1]);
-
-//echo 2;
-
 
 
 

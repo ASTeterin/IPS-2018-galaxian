@@ -14,7 +14,6 @@ if (empty($name) || empty($password)) {
 $registredUsers = getUserInfoByName($name);
 
 if (empty($registredUsers)) {
-    //echo json_encode(['error_code' => ERR_USER_NOT_EXIST]);
     echo json_encode(ERR_USER_NOT_EXIST);//2
     return;
 }
@@ -23,9 +22,7 @@ if (checkPassword($name, $password)) {
     
     saveToSession('username', $name);
     echo json_encode(ERR_NO_ERROR);
-    //header("Location: ../personal_accaunt.php");
     exit();
 } else {
-    //echo json_encode(['error_code' => ERR_INCORRECT_PASS]);
     echo json_encode(ERR_INCORRECT_PASS);
 }

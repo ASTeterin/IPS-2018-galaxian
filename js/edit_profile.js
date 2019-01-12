@@ -1,83 +1,64 @@
 $(window).on('load', onWindowLoaded);
 
 function onWindowLoaded() {
-    //getSelectedItems();
-    $currentUsername = $('#username').val();
-    removeErrorState('#password', 'error_in_field');
-    removeErrorState('#reenter_password', 'error_in_field');
-    changePassword();
-    saveChanges($currentUsername);
+    removeErrorState();
+    clickOnField();
+    saveChanges();
+    exitWithoutSaving();
 }
 
-function removeErrorState($selector, $class) {
-    $($selector).click(function() {
-        $($selector).removeClass($class);
+function removeErrorState() {
+    $('#password').removeClass('error_in_field');
+    $('#reenter_password').removeClass('error_in_field');  
+}
+
+
+function clickOnField() {
+    $('#password').click(function() {
+        removeErrorState();
     });
-}
-/*
-function getSelectedItems() {
-    $friends = [];
-    $list = $('#friends_list');
-    for (let i = 0; i < 10; i++) {
-        if ($list.options[i].selected) {
-            $friends.push($list.options[i].value);
-        }
-    }
-    $friends.val();
-    return $friends;
-}
-*/
-function changePassword() {
-    $('#change_pass').click(function() {
-        if ($(this).is(':checked')) {
-            $('#password').removeAttr('readonly');
-            $('#reenter_password').removeAttr('readonly');
-        } else {
-            $('#password').attr('readonly', true);
-            $('#reenter_password').attr('readonly', true);
-        }
+    $('#reenter_password').click(function() {
+        removeErrorState();
     });
 }
 
-function checkPassword($password, $confirmedPassword) {
+function saveChanges() {
+    $('#change_user_info_btn').click(function() {
+        removeErrorState();
+        updateUserInfo();
+    });
+}
+
+function updateUserInfo() {
+    $password = $('#password').val();
+    $username = $('#username').val();
+    $confirmedPassword = $('#reenter_password').val();
+
     if ($password != $confirmedPassword) {
         $('#password').addClass('error_in_field');
         $('#reenter_password').addClass('error_in_field');
-        return false;
+    } else {
+        $data = {'username': $username, 'password': $password};
+        $.ajax({
+            url: 'inc/edit_profile.inc.php',
+            type: 'POST',
+            data: $data,
+            dataType: 'json',
+            complete: onComplete,
+        });
     }
-    return true;
-}
-
-
-function saveChanges($friends) {
-    $('#change_user_info_btn').click(function() {
-        updateUserInfo($friends);
-    });
-}
-
-function updateUserInfo($currentUsername) {
-    $username = $('#username').val();
-    $password = '';
-    $password = $('#password').val();
-    $confirmedPassword = $('#reenter_password').val();
-    if (($username == $currentUsername) && ($password == '')) {
-        return;
-    }
-
-    if ($('#change_pass').is(':checked')) {
-        checkPassword($password, $confirmedPassword);
-    }
-    $data = {'username': $username, 'password': $password};
-    $.ajax({
-        url: 'inc/edit_profile.inc.php',
-        type: 'POST',
-        data: $data,
-        dataType: 'json',
-        complete: onComplete,
-    });
 }
 
 function onComplete() {
-    window.location = 'personal_accaunt.php';
+    $('#change_info_modal').modal('show');
+    //window.location = 'personal_accaunt.php';
 }
+
+function exitWithoutSaving() {
+    $('#exit_user_profile_btn').click(function() {
+        window.location = 'personal_accaunt.php';
+    });
+}
+
+
 

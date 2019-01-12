@@ -7,11 +7,9 @@ $name = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 $friends = $_POST['friends'] ?? '';
 $isChangeed = false;
-//echo ($name);
-//echo ($password);
+
 
 $currentName = getFromSession('username');
-//echo $name;
 
 if (($currentName == $name) && ($password == '')) {
     return;
@@ -25,11 +23,9 @@ if ($currentName != $name) {
 }
 
 if ($password !== '') {
-    //if (checkPassword($name, $password)) {
-        $hash = sha1($password);
-        changePassword($name, $hash);
-        $isChangeed = true;
-    //}
+    $hash = sha1($password);
+    changePassword($name, $hash);
+    $isChangeed = true;
 }
 
 if ($isChangeed) {

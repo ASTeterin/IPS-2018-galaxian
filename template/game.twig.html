@@ -41,12 +41,16 @@
             </div>  
         </div>
 
+        <audio id="shoot" autoplay>
+            <source src="./audio/shoot.mp3" type="audio/mpeg">
+        </audio>
+
         <div class="col-sm-10 col-md-8 battle_arena">
             <canvas id="canvas" width="500" height="640"></canvas>
         </div> 
     </div>
  
-    {% include "stop_game.html.twig" %} 
+    {% include "stop_game.html.twig" %}  
     {% include "about_game.html.twig" %}
     {% include "end_game.html.twig" %}         
    

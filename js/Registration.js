@@ -38,8 +38,8 @@ function registerButtonClicked() {
                 });
             }
         }
-        $('#password').removeClass('error_in_field');
-        $('#reenter_password').removeClass('error_in_field');
+        //$('#password').removeClass('error_in_field');
+        //$('#reenter_password').removeClass('error_in_field');
     });
 }
 
@@ -74,6 +74,10 @@ function onComplete($response) {
         $('.modal').modal('hide');
         showUserInfo($responseObj.name);
         $('#login').val($responseObj.name);
+        $('#username').val('');
+        $('#password').val('');
+        $('#reenter_password').val('');
+
     } else {
         $('#error_registration').text('User alrady exist');
     }

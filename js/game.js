@@ -67,6 +67,7 @@ function processEvents(keyPressedFlag, gameContext) {
         gameContext.ship.direction = 0;
     }
     if ((keyPressedFlag.shoot) && (gameContext.ship.canShoot)) {
+        document.getElementById('shoot').play();
         createNewShoot(gameContext.bullets, gameContext.ship);
         gameContext.ship.canShoot = false;
     }
@@ -74,6 +75,7 @@ function processEvents(keyPressedFlag, gameContext) {
         gameContext.ship.canShoot = true;
     }
     if ((keyPressedFlag.rocketShoot) && (gameContext.ship.canShoot)) {
+        document.getElementById('shoot').play();
         createNewShoot(gameContext.rockets, gameContext.ship);
         gameContext.ship.countRockets--;
         gameContext.ship.canShoot = false;
@@ -108,6 +110,10 @@ function main() {
     if (!((keyPressedFlag.stop) || (gameContext.gameState == STOP))) {
         return;
     }
+
+    //canvas.addEventListener('click', () => {
+        
+    //}, false);
     
     const animateFn = () => {
         const currentTimeStamp = Date.now();
